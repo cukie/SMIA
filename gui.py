@@ -14,6 +14,6 @@ def getParentFile():
 	Tk().withdraw() 
 
 	# show an "Open" dialog box and return the path to the selected file
-	filename = askdirectory() 
+	filename = askdirectory(title = "Choose Parent Directory") 
 
 	return filename
