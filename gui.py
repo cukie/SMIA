@@ -6,7 +6,7 @@
 # A small module to work with getting information from GUI
 
 from Tkinter import Tk
-from tkFileDialog import askopenfilename
+from tkFileDialog import askdirectory
 
 # Opens a file open dialog for the user and asks for the parent directory
 def getParentFile():
@@ -14,6 +14,6 @@ def getParentFile():
 	Tk().withdraw() 
 
 	# show an "Open" dialog box and return the path to the selected file
-	filename = askopenfilename() 
+	filename = askdirectory() 
 
 	return filename
