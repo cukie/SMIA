@@ -4,6 +4,7 @@
 # (c) All Rights Reserved
 
 from PIL import Image
+import sys
 import os
 
 
@@ -16,3 +17,19 @@ def getImage(filepath):
 	im = Image.open(filepath)
 
 	return im 
+
+def 
+
+
+if __name__ == '__main__':
+
+	# first argument - base directory
+	base_dir = sys.argv[1]
+
+	# open the file... and perform the given operations for each entry
+	count = 1
+	for directory in listdir_fullpath(base_dir):
+		print "processing directory: " + str(count) 
+		count += 1
+		for pic in listdir_fullpath(directory):
+			pass
