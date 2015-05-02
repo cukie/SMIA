@@ -1,0 +1,27 @@
+{
+    "base_directory": "/home/cukierma/Dropbox", 
+    "marker_names": [
+        [
+            "marker1", 
+            "gil"
+        ], 
+        [
+            "marker2", 
+            "amit"
+        ]
+    ], 
+    "mask_names": [
+        [
+            "mask1", 
+            "eti"
+        ], 
+        [
+            "mask2", 
+            "mario"
+        ]
+    ], 
+    "num_markers": 2, 
+    "num_masks": 2, 
+    "num_pictures": 4, 
+    "output_to": "/testing/testing/123"
+}

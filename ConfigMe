@@ -1,0 +1,27 @@
+{
+    "base_directory": "full path", 
+    "marker_names": [
+        [
+            "file_prefix", 
+            "name"
+        ], 
+        [
+            "file_prefix2", 
+            "name2"
+        ]
+    ], 
+    "mask_names": [
+        [
+            "file_prefix", 
+            "name"
+        ], 
+        [
+            "file_prefix2", 
+            "name2"
+        ]
+    ], 
+    "num_markers": "number of markers", 
+    "num_masks": "number of masks", 
+    "num_pictures": "number of layers", 
+    "output_to": "full output path"
+}
