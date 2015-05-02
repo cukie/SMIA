@@ -11,7 +11,7 @@ from tkFileDialog import askdirectory
 # Opens a file open dialog for the user and asks for the parent directory
 def getParentFile():
 	# we don't want a full GUI, so keep the root window from appearing
-	Tk().withdraw() 
+	# Tk().withdraw() 
 
 	# show an "Open" dialog box and return the path to the selected file
 	filename = askdirectory(title = "Choose Parent Directory") 
