@@ -89,6 +89,14 @@ def TestConfigInput():
 	else:
 		return (True, "Configuration file parsed successfully!")
 
+def LoopDirectory(toPerform):
+	"""
+	Iterates through the base directory accessing each
+	batch of images at a time, creating a BatchImage 
+	object. Then, performs the functions identified
+	in toPerform on each batch. See documentation
+	for the options for toPerform.
+	"""
 
 if __name__ == '__main__':
 
@@ -98,8 +106,10 @@ if __name__ == '__main__':
 	success, message = TestConfigInput()
 	if not success:
 		print "ERRORS: \n" + message
+		sys.exit(1)
 	else:
 		print message 
+
 
 	# open the file... and perform the given operations for each entry
 	# count = 1
