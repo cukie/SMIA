@@ -1,27 +1,33 @@
 {
-    "base_directory": "/home/cukierma/Dropbox", 
+    "base_directory": "/testing/full/path", 
+    "mark_opts": [
+        "MARK_INDI"
+    ], 
     "marker_names": [
         [
-            "marker1", 
+            "mark1", 
             "gil"
         ], 
         [
-            "marker2", 
+            "mark2", 
             "amit"
         ]
     ], 
     "mask_names": [
         [
             "mask1", 
-            "eti"
+            "mario"
         ], 
         [
             "mask2", 
-            "mario"
+            "eti"
         ]
+    ], 
+    "mask_opts": [
+        "MASK_INDI"
     ], 
     "num_markers": 2, 
     "num_masks": 2, 
     "num_pictures": 4, 
-    "output_to": "/testing/testing/123"
+    "output_to": "/testing/out/path"
 }

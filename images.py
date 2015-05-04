@@ -15,8 +15,10 @@ base_dir = None
 num_layers = None
 num_masks = None
 num_markers = None
-mask_names = {}
-marker_names = {}
+mask_names = []
+marker_names = []
+mask_opts = []
+mark_opts = []
 
 output_path = None
 
@@ -44,7 +46,7 @@ def ParseConfig(config_file):
 	Takes in a json filename, opens it, and parses
 	the input into our global config variables 
 	"""
-	global base_dir,num_layers,num_markers,num_masks,mask_names,marker_names,output_path
+	global base_dir,num_layers,num_markers,num_masks,mask_names,marker_names,output_path, operations
 
 	with open(config_file) as config:
 		data = json.load(config)
@@ -55,6 +57,8 @@ def ParseConfig(config_file):
 		num_markers = data['num_markers']
 		mask_names = data['mask_names']
 		marker_names = data['marker_names']
+		mask_opts = data['mask_opts']
+		mark_opts = data['mark_opts']
 		output_path = data['output_to']
 
 def TestConfigInput():
@@ -64,9 +68,17 @@ def TestConfigInput():
 	error message is also returned.
 	(True/False,message)
 	"""
+
+	############ Allowable Operation Values ##########
+	allowable_mask = ["MASK_INDI","MASK_ALL"]
+	allowable_mark = ["MARK_INDI", "MARK_ALL","COLLOC_MARK"]
+
+	############ Input Validators ###################
+
 	# We're basically just making sure that there's no
 	# Default values left here from the config file.
 
+	# If everything is fine - this list stays empty
 	messages = []
 	if base_dir == "full path" or base_dir == None:
 		messages.append("Please specify a base directory in the configuration file \n")
@@ -81,12 +93,27 @@ def TestConfigInput():
 		messages.append("Please specify the names and file prefixes of masks for this run in the configuration file \n")
 	if len(marker_names) < 1:
 		messages.append("Please specify the number of markers for this run in the configuration file \n")
+
+	# all operations must be in our predefined list of
+	# acceptable operations. Defined at top of this 
+	# function 
+	for operation in mask_opts:
+		if operation not in allowable_mask:
+			messages.append("Error in mask operation chosen - please see usage notes")
+	for operation in mark_opts:
+		if operation not in allowable_mark:
+			messages.append("Error in marker operation chosen - please see usage notes")
+
+
 	if output_path == "full output path" or output_path == None:
 		messages.append("Please specify an output path in the configuration file\n")
 
-	if len(messages) > 0:
+	# If we have error messages
+	if len(messages) > 0: 
+		# make them pretty and send them off
 		return (False, "".join(messages))
 	else:
+		# every little thing is gonna be alright
 		return (True, "Configuration file parsed successfully!")
 
 def LoopDirectory(toPerform):

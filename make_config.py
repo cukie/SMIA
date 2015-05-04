@@ -17,7 +17,8 @@ if __name__ == "__main__":
 	config['mask_names'] = [('file_prefix','name'),('file_prefix2','name2')]
 	config['num_markers'] = "number of markers"
 	config['marker_names'] = [('file_prefix','name'),('file_prefix2','name2')]
-	config['operations'] = ['list of operations','see usages notes', 'e.g. ALL']
+	config['mask_opts'] = ['list of mask operations','see usages notes', 'e.g. MASK_INDI']
+	config['mark_opts'] = ['list of marker operations','see usages notes', 'e.g. MARK_INDI']
 
 	# output options
 	config['output_to'] = "full output path"
