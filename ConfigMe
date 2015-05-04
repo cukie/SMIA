@@ -23,5 +23,10 @@
     "num_markers": "number of markers", 
     "num_masks": "number of masks", 
     "num_pictures": "number of layers", 
+    "operations": [
+        "list of operations", 
+        "see usages notes", 
+        "e.g. ALL"
+    ], 
     "output_to": "full output path"
 }
