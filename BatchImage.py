@@ -15,6 +15,9 @@ class Mask(object):
 	"""
 	def __init__(self,img,name,threshold):
 		self._img=img
+		# Close this immediately... We don't need it anymore
+		# and having two copies of it KILLS runtime
+		img.close()
 		self.name = name
 		self.threshold = threshold
 
@@ -23,7 +26,7 @@ class Mask(object):
 		# "Not set of pixels" 
 
 		# all our pixels
-		all_pixels = np.array(img)
+		all_pixels = np.array(self._img)
 
 		self.positive_set = Set()
 		self.negative_set = Set()
