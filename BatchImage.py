@@ -18,6 +18,7 @@ class Mask(object):
 		# Close this immediately... We don't need it anymore
 		# and having two copies of it KILLS runtime
 		img.close()
+
 		self.name = name
 		self.threshold = threshold
 
@@ -52,11 +53,15 @@ class Marker(object):
 	in our own concept of a marker. It's a way to logically
 	separate the Marker images from the Mask images
 	"""
-	def __init__(self,img,name):
+	def __init__(self,img,name,threshold):
 		self._img=img
-		self.name = name
+		# Close this immediately. DRY
+		img.close()
 
-	# Delegate all of Mask's inner functions to Image
+		self.name = name
+		self.threshold = threshold
+
+	# Delegate all of Marker's inner functions to Image
 	# e.g. im.__getattr__('size') == im.size if there was no wrapper 
 	def __getattr__(self,key):
 		if key == '_img':
