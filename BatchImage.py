@@ -42,10 +42,46 @@ class Marker(object):
 		return getattr(self._img,key)
 
 
-class BatchImage(masks, markers, num_images):
+class BatchImage():
 	"""
 	A BatchImage object aggregates a set of Mask
 	and Marker objects into one clearly defined 
 	batch of images. It defines all the operations
 	that should be performed on masks and markers.
 	"""
+
+	def __init__(self, mask_list, mark_list, num_pics, mask_opts,mark_opts):
+
+		# as we iterate here - raise exception if these aren't masks
+		# and markers respectively
+		self.masks = []
+		for mask in mask_list:
+			if type(mask) is not Mask:
+				raise ValueError("all values is mask_list parameter must be masks. " + type(mask) + " passed as part of list.")
+			else:
+				self.masks.append(mask)
+		self.markers = []
+
+		# and let's do the same with our markers
+		for marker in mark_list:
+			if type(marker) is not Marker:
+				raise ValueError("all values is mark_list parameter must be markers. " + type(marker) + " passed as part of list.")
+			else:
+				self.markers.append(marker)
+
+		# Let's just make sure everything is here and consistent
+		# before we assign each value
+		if num_pics != (len(masks) + len(markers)):
+			raise ValueError("num_pics does not match the cumulative number of masks and markers passed into BatchImage instance.")
+		else:
+			self.num_pics = num_pics
+
+		# our operations for this batch... 
+		self.mask_opts = mask_opts
+		self.mark_opts = mark_opts
+
+		
+
+
+
+
