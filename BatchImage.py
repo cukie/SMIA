@@ -4,6 +4,8 @@
 # (c) All Rights Reserved
 
 from PIL import Image
+from sets import Set 
+import numpy as np 
 
 class Mask(object):
 	"""
@@ -11,10 +13,28 @@ class Mask(object):
 	in our own concept of a mask. It's a way to logically
 	separate the Mask images from the Marker images
 	"""
-	def __init__(self,img,name):
+	def __init__(self,img,name,threshold):
 		self._img=img
-		# for now - a mask is just an image with a name
 		self.name = name
+		self.threshold = threshold
+
+		# a mask is responsible for keeping track of its 
+		# own threshold set of pixels and its 
+		# "Not set of pixels" 
+
+		# all our pixels
+		all_pixels = np.array(img)
+
+		self.positive_set = Set()
+		self.negative_set = Set()
+
+		# iterate through our pixel map and compare to threshold
+		for index, value in np.ndenumerate(all_pixels):
+			if (value >= self.threshold):
+				self.positive_set.add(index)
+			else:
+				self.negative_set.add(index)
+
 
 	# Delegate all of Mask's inner functions to Image
 	# e.g. im.__getattr__('size') == im.size if there was no wrapper 
@@ -31,7 +51,6 @@ class Marker(object):
 	"""
 	def __init__(self,img,name):
 		self._img=img
-		# for now - a mask is just an image with a name
 		self.name = name
 
 	# Delegate all of Mask's inner functions to Image
@@ -89,3 +108,4 @@ class BatchImage():
 		"""
 
 		# This function really just parses the operation lists and chooses which functions to delegate to. It then returns those values. 
+2
