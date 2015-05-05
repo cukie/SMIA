@@ -80,8 +80,12 @@ class BatchImage():
 		self.mask_opts = mask_opts
 		self.mark_opts = mark_opts
 
-		
+	def PerformOps():
+		"""
+		Uses the mask_opts and mark_opts to decide which
+		operations to perform. Performs them, and returns a
+		dictionary of key,value pairs giving with the results.
+		Key = Column Heading, Value = Data
+		"""
 
-
-
-
+		# This function really just parses the operation lists and chooses which functions to delegate to. It then returns those values. 
