@@ -9,6 +9,7 @@ import os
 import itertools
 import json
 import BatchImage as BI 
+import time
 
 
 ######## GLOBAL CONFIGURATION VARIABLES ############
@@ -178,10 +179,8 @@ def LoopDirectory():
 		# for marker in batch.markers:
 		# 	print marker.name
 
-
-if __name__ == '__main__':
-
-	# parse the json configuration file
+def main():
+		# parse the json configuration file
 	config_file = sys.argv[1]
 	ParseConfig(config_file)
 	success, message = TestConfigInput()
@@ -190,4 +189,22 @@ if __name__ == '__main__':
 		sys.exit(1)
 	else:
 		print message 
+
+	# Here's where the magic happens
 	LoopDirectory()
+
+	# print some success messages
+	# ToDo: bundle this up into its own method
+	print
+	print "You have succesfully procesed:\n" + base_dir
+	print
+	print "See your results in:\n" + output_path
+	print
+
+
+if __name__ == '__main__':
+	main()
+	# for i in xrange(15):
+	# 	time1 = time.time()
+	# 	main()
+	# 	print time.time() - time1
