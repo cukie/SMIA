@@ -63,6 +63,16 @@ class Marker(object):
 
 		self.all_pixels = np.array(self._img)
 
+		self.positive_set = Set()
+		self.negative_set = Set()
+
+		# iterate through our pixel map and compare to threshold
+		for index, value in np.ndenumerate(self.all_pixels):
+			if (value >= self.threshold):
+				self.positive_set.add(index)
+			else:
+				self.negative_set.add(index)
+
 	# Delegate all of Marker's inner functions to Image
 	# e.g. im.__getattr__('size') == im.size if there was no wrapper 
 	def __getattr__(self,key):
@@ -116,11 +126,32 @@ class BatchImage():
 		dictionary of key,value pairs giving with the results.
 		Key = Column Heading, Value = Data
 		"""
+
+		# This function really just parses the operation lists and chooses which functions to delegate to. It then returns those values. 
 		
 		# mask operations really only have two options...
-		# This function really just parses the operation lists and chooses which functions to delegate to. It then returns those values. 
-	
-	def GetOverlayLocations(maskset,markerobj):
+		# TODO: this really shouldn't be necessary.. do this earlier.
+
+		maskoperation = mask_opts[0]
+		markoperation = marker_opts[0]
+
+		# if we just need singular masks...
+		if maskoperation == "MASK_INDI":
+			# We have three cases:
+			if markoperation == "MARK_INDI":
+				pass
+			if markoperation == "MARK_ALL":
+				pass
+			if markoperation == "COLLOC_MARK":
+				pass
+		else:
+			# MASK_ALL things get complicated real fast...
+			pass
+
+
+
+
+	def GetOverlayLocations(maskset,markerset):
 		"""
 		Takes a set of pixel locations and a marker object.
 		Returns a set of of pixel values for which the marker
@@ -128,11 +159,7 @@ class BatchImage():
 		"""
 
 		mask = maskset
-		marker = Set()
-
-		# make a Set of pixel locations for the marker
-		for index, value in np.ndenumerate(markerobj.all_pixels):
-			marker.add(index)
+		marker = markerset
 
 		# set intersection between marker and mask gives us the locations we need 
 		overlay = mask.intersection(marker)

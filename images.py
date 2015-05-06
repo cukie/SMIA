@@ -94,16 +94,10 @@ def LoopDirectory():
 		# now let's create a batch image object
 		# We pass in num_layers because Batch_image
 		# constructor will make sure nothing has gone 
-		# wrong... a kind of delegation
+		# wrong... a kind of delegation of error checking
 		batch = BI.BatchImage(masks,markers,num_layers,mask_opts,mark_opts)
 		batch.PerformOps(mask_opts,mark_opts)
-
-		# print "Masks: "
-		# for mask in batch.masks:
-		# 	print mask.name
-		# print "Markers: "
-		# for marker in batch.markers:
-		# 	print marker.name
+		
 
 def ConfigDictToGlobals(config_dict):
 	"""
