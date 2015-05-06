@@ -7,8 +7,8 @@ from PIL import Image
 import sys
 import os
 import itertools
-import json
 import BatchImage as BI 
+import parse_config as pc 
 import time
 
 
@@ -42,81 +42,6 @@ def getImage(filepath):
 	im = Image.open(filepath)
 
 	return im 
-
-def ParseConfig(config_file):
-	"""
-	Takes in a json filename, opens it, and parses
-	the input into our global config variables 
-	"""
-	global base_dir,num_layers,num_markers,num_masks,mask_names,marker_names,output_path, operations
-
-	with open(config_file) as config:
-		data = json.load(config)
-		# load these values into our globals...
-		base_dir = data['base_directory']
-		num_layers = data['num_pictures']
-		num_masks = data['num_masks']
-		num_markers = data['num_markers']
-		mask_names = data['mask_names']
-		marker_names = data['marker_names']
-		mask_opts = data['mask_opts']
-		mark_opts = data['mark_opts']
-		output_path = data['output_to']
-
-def TestConfigInput():
-	"""
-	Tests the global variables defined in ParseConfig.
-	Returns true if good and false if not. A confirm or
-	error message is also returned.
-	(True/False,message)
-	"""
-
-	############ Allowable Operation Values ##########
-	allowable_mask = ["MASK_INDI","MASK_ALL"]
-	allowable_mark = ["MARK_INDI", "MARK_ALL","COLLOC_MARK"]
-
-	############ Input Validators ###################
-
-	# We're basically just making sure that there's no
-	# Default values left here from the config file.
-
-	# If everything is fine - this list stays empty
-	messages = []
-	if base_dir == "full path" or base_dir == None:
-		messages.append("Please specify a base directory in the configuration file \n")
-		print base_dir
-	if num_layers == "number of layers" or num_layers == None or num_layers < 1:
-		messages.append("Please specify the number of layers for this run in the configuration file \n")
-	if num_masks == "number of masks" or num_masks == None or num_masks < 1:
-		messages.append("Please specify the number of masks for this run in the configuration file \n")
-	if num_markers == "number of masks" or num_markers == None or num_markers < 1:
-		messages.append("Please specify the number of markers for this run in the configuration file \n")
-	if len(mask_names) < 1:
-		messages.append("Please specify the names and file prefixes of masks for this run in the configuration file \n")
-	if len(marker_names) < 1:
-		messages.append("Please specify the number of markers for this run in the configuration file \n")
-
-	# all operations must be in our predefined list of
-	# acceptable operations. Defined at top of this 
-	# function 
-	for operation in mask_opts:
-		if operation not in allowable_mask:
-			messages.append("Error in mask operation chosen - please see usage notes")
-	for operation in mark_opts:
-		if operation not in allowable_mark:
-			messages.append("Error in marker operation chosen - please see usage notes")
-
-
-	if output_path == "full output path" or output_path == None:
-		messages.append("Please specify an output path in the configuration file\n")
-
-	# If we have error messages
-	if len(messages) > 0: 
-		# make them pretty and send them off
-		return (False, "".join(messages))
-	else:
-		# every little thing is gonna be alright
-		return (True, "Configuration file parsed successfully!")
 
 def MaskorMarker(pic_path):
 	"""
@@ -180,17 +105,37 @@ def LoopDirectory():
 		# for marker in batch.markers:
 		# 	print marker.name
 
-def main():
+def ConfigDictToGlobals(config_dict):
+	"""
+	Takes a dictionary of key=config_name, value=config_value
+	and puts it into our appropriate global variables.
+	Note: This subroutine is defined ONLY for its side effects.
+	"""
+	# We're writing to gloabsl here...
+	global base_dir,num_layers,num_masks,num_markers,mask_names,marker_names,mask_opts,mark_opts,output_path
+
+	base_dir = config_dict['base_dir']
+	num_layers = config_dict['num_layers']
+	num_masks = config_dict['num_masks']
+	num_markers = config_dict['num_markers']
+	mask_names = config_dict['mask_names']
+	marker_names = config_dict['marker_names']
+	mask_opts = config_dict['mask_opts']
+	mark_opts = config_dict['mark_opts']
+	output_path = config_dict['output_path']
+
+
+output_path = None
+def main(config_file):
 		# parse the json configuration file
-	config_file = sys.argv[1]
-	ParseConfig(config_file)
-	success, message = TestConfigInput()
+	success,message,config_dict = pc.ParseConfig(config_file)
 	if not success:
 		print "ERRORS: \n" + message
 		sys.exit(1)
 	else:
 		print message 
-
+	# Set our configuration variables
+	ConfigDictToGlobals(config_dict)
 	# Here's where the magic happens
 	LoopDirectory()
 
@@ -204,7 +149,7 @@ def main():
 
 
 if __name__ == '__main__':
-	main()
+	main(sys.argv[1])
 	# for i in xrange(15):
 	# 	time1 = time.time()
 	# 	main()

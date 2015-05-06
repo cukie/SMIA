@@ -3,6 +3,8 @@
 # Creation Date: 5/6/15
 # (c) All Rights Reserved
 
+import json
+
 """
 This module contains all the logic for parsing a
 configuration file (in json format).
@@ -41,6 +43,7 @@ def ParseConfig(config_file):
 	# Let's validate our input... Hopefully catch errors early!
 	validated,message = TestConfigInput(configurations)
 
+	return (validated,message,configurations)
 
 def TestConfigInput(config_dict):
 	"""

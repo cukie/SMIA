@@ -109,7 +109,7 @@ class BatchImage():
 		self.mask_opts = mask_opts
 		self.mark_opts = mark_opts
 
-	def PerformOps(mask_opts,marker_opts):
+	def PerformOps(self,mask_opts,marker_opts):
 		"""
 		Uses the mask_opts and mark_opts to decide which
 		operations to perform. Performs them, and returns a
