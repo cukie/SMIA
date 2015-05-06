@@ -14,9 +14,9 @@ if __name__ == "__main__":
 	config['base_directory'] = "full path"
 	config['num_pictures'] = "number of layers"
 	config['num_masks'] = "number of masks"
-	config['mask_names'] = [('file_prefix','name'),('file_prefix2','name2')]
+	config['mask_names'] = [('file_prefix','name','threshold'),('file_prefix','name','threshold')]
 	config['num_markers'] = "number of markers"
-	config['marker_names'] = [('file_prefix','name'),('file_prefix2','name2')]
+	config['marker_names'] = [('file_prefix','name','threshold'),('file_prefix','name','threshold')]
 	config['mask_opts'] = ['list of mask operations','see usages notes', 'e.g. MASK_INDI']
 	config['mark_opts'] = ['list of marker operations','see usages notes', 'e.g. MARK_INDI']
 

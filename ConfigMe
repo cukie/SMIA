@@ -8,21 +8,25 @@
     "marker_names": [
         [
             "file_prefix", 
-            "name"
+            "name", 
+            "threshold"
         ], 
         [
-            "file_prefix2", 
-            "name2"
+            "file_prefix", 
+            "name", 
+            "threshold"
         ]
     ], 
     "mask_names": [
         [
             "file_prefix", 
-            "name"
+            "name", 
+            "threshold"
         ], 
         [
-            "file_prefix2", 
-            "name2"
+            "file_prefix", 
+            "name", 
+            "threshold"
         ]
     ], 
     "mask_opts": [
