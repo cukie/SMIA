@@ -61,7 +61,7 @@ class Marker(object):
 		self.name = name
 		self.threshold = threshold
 
-		self.all_pixels = np.array(_img)
+		self.all_pixels = np.array(self._img)
 
 	# Delegate all of Marker's inner functions to Image
 	# e.g. im.__getattr__('size') == im.size if there was no wrapper 
@@ -100,7 +100,7 @@ class BatchImage():
 
 		# Let's just make sure everything is here and consistent
 		# before we assign each value
-		if num_pics != (len(masks) + len(markers)):
+		if num_pics != (len(self.masks) + len(self.markers)):
 			raise ValueError("num_pics does not match the cumulative number of masks and markers passed into BatchImage instance.")
 		else:
 			self.num_pics = num_pics
@@ -137,3 +137,13 @@ class BatchImage():
 		overlay = mask.intersection(marker)
 
 		return overlay
+
+	def GetPixelValuesFromCoordinates(setValues,imageObj):
+		"""
+		Takes a set of coordinate values and returns a dictionary
+		of key,value pairs such that each pair is defined as:
+		pixellocation,pixelvalue 
+		"""
+		return_dict = {}
+		for location in setValues:
+			return_dict[location] = imageObj._img.getpixel(location)

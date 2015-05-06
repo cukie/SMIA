@@ -1,33 +1,52 @@
 {
-    "base_directory": "/testing/full/path", 
+    "base_directory": "/Users/cukierma/Documents/bitbucket_repos/imaging_stack/production_testers/test_images", 
     "mark_opts": [
         "MARK_INDI"
     ], 
     "marker_names": [
         [
-            "mark1", 
-            "gil"
+            "active", 
+            "active",
+            55
         ], 
         [
-            "mark2", 
-            "amit"
+            "epithelium", 
+            "epi",
+            55
         ]
     ], 
     "mask_names": [
         [
-            "mask1", 
-            "mario"
+            "3D", 
+            "threed",
+            55
         ], 
         [
-            "mask2", 
-            "eti"
+            "nerve", 
+            "nail_biting",
+            55
+        ],
+        [
+            "7th", 
+            "seven",
+            55
+        ],
+        [
+            "nuclei", 
+            "center",
+            55
+        ],
+        [
+            "stroma", 
+            "whatttt",
+            55
         ]
     ], 
     "mask_opts": [
         "MASK_INDI"
     ], 
     "num_markers": 2, 
-    "num_masks": 2, 
-    "num_pictures": 4, 
+    "num_masks": 5, 
+    "num_pictures": 7, 
     "output_to": "/testing/out/path"
 }

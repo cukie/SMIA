@@ -8,6 +8,7 @@ import sys
 import os
 import itertools
 import json
+import BatchImage as BI 
 
 
 ######## GLOBAL CONFIGURATION VARIABLES ############
@@ -116,7 +117,31 @@ def TestConfigInput():
 		# every little thing is gonna be alright
 		return (True, "Configuration file parsed successfully!")
 
-def LoopDirectory(toPerform):
+def MaskorMarker(pic_path):
+	"""
+	A little helper that takes a file prefix and 
+	returns "mask" if configuration file deemed it a 
+	mask and "marker" if deemed a marker.
+	Raises an Exception if prefix isn't found in either
+	configuration list.
+	"""
+
+	mask_prefixes = [x[0] for x in mask_names]
+	marker_prefixes = [x[0] for x in marker_names]
+
+	for mask_prefix,mask_info in zip(mask_prefixes,mask_names):
+		if mask_prefix in pic_path:
+			prefix,name,treshold = mask_info
+			return ("mask",prefix,name,treshold)
+	for marker_prefix,marker_info in zip(marker_prefixes,marker_names):
+		if marker_prefix in pic_path:
+			prefix,name,treshold = marker_info
+			return ("marker",prefix,name,treshold)
+
+	raise ValueError("given marker or mask prefix not found while traversing directory")
+
+
+def LoopDirectory():
 	"""
 	Iterates through the base directory accessing each
 	batch of images at a time, creating a BatchImage 
@@ -124,6 +149,35 @@ def LoopDirectory(toPerform):
 	in toPerform on each batch. See documentation
 	for the options for toPerform.
 	"""
+
+	# open the file... and perform the given operations for each entry
+	count = 1
+	for directory in listdir_fullpath(base_dir):
+		print "processing directory: " + str(count) 
+		count += 1
+		masks = []
+		markers = []
+		for pic in listdir_fullpath(directory):
+			whichone,prefix,name,threshold = MaskorMarker(pic)
+			if whichone == 'mask':
+				# let's make a new mask and add it to our list
+				masks.append(BI.Mask(getImage(pic),name,threshold))
+			if whichone == 'marker':
+				markers.append(BI.Marker(getImage(pic),name,threshold))
+
+		# now let's create a batch image object
+		# We pass in num_layers because Batch_image
+		# constructor will make sure nothing has gone 
+		# wrong... a kind of delegation
+		batch = BI.BatchImage(masks,markers,num_layers,mask_opts,mark_opts)
+
+		# print "Masks: "
+		# for mask in batch.masks:
+		# 	print mask.name
+		# print "Markers: "
+		# for marker in batch.markers:
+		# 	print marker.name
+
 
 if __name__ == '__main__':
 
@@ -136,12 +190,4 @@ if __name__ == '__main__':
 		sys.exit(1)
 	else:
 		print message 
-
-
-	# open the file... and perform the given operations for each entry
-	# count = 1
-	# for directory in listdir_fullpath(base_dir):
-	# 	print "processing directory: " + str(count) 
-	# 	count += 1
-	# 	for pic in listdir_fullpath(directory):
-	# 		pass
+	LoopDirectory()
