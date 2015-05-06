@@ -116,7 +116,7 @@ class BatchImage():
 		dictionary of key,value pairs giving with the results.
 		Key = Column Heading, Value = Data
 		"""
-
+		pass
 		# This function really just parses the operation lists and chooses which functions to delegate to. It then returns those values. 
 	
 	def GetOverlayLocations(maskset,markerobj):
