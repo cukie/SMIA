@@ -171,6 +171,7 @@ def LoopDirectory():
 		# constructor will make sure nothing has gone 
 		# wrong... a kind of delegation
 		batch = BI.BatchImage(masks,markers,num_layers,mask_opts,mark_opts)
+		batch.PerformOps(mask_opts,mark_opts)
 
 		# print "Masks: "
 		# for mask in batch.masks:
