@@ -98,11 +98,10 @@ def TestConfigInput(config_dict):
 	if len(mask_opts) !=1 or mask_opts[0] not in allowable_mask:
 		messages.append("Error in mask operation chosen. Please choose exactly one of the two allowable values - see usage notes")
 
-
-	for operation in mark_opts:
-		if operation not in allowable_mark:
-			messages.append("Error in marker operation chosen - please see usage notes")
-
+	# We only do one mask or marker operation at a time...
+	# Sorry....
+	if len(mark_opts) !=1 or mark_opts[0] not in allowable_mark:
+		messages.append("Error in marker operation chosen. Please choose exactly one of the three allowable values - see usage notes")
 
 	if output_path == "full output path" or output_path == None:
 		messages.append("Please specify an output path in the configuration file\n")
