@@ -84,12 +84,16 @@ def LoopDirectory():
 		masks = []
 		markers = []
 		for pic in listdir_fullpath(directory):
+			time1 = time.time()
+
 			whichone,prefix,name,threshold = MaskorMarker(pic)
 			if whichone == 'mask':
 				# let's make a new mask and add it to our list
 				masks.append(BI.Mask(getImage(pic),name,threshold))
 			if whichone == 'marker':
 				markers.append(BI.Marker(getImage(pic),name,threshold))
+				
+			print time.time() - time1
 
 		# now let's create a batch image object
 		# We pass in num_layers because Batch_image

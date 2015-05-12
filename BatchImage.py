@@ -17,7 +17,7 @@ class Mask(object):
 		self._img=img
 		# Close this immediately... We don't need it anymore
 		# and having two copies of it KILLS runtime
-		img.close()
+		# img.close()
 
 		self.name = name
 		self.threshold = threshold
@@ -28,6 +28,7 @@ class Mask(object):
 
 		# all our pixels
 		self.all_pixels = np.array(self._img)
+		print (self.all_pixels)
 
 		self.positive_set = Set()
 		self.negative_set = Set()
@@ -55,8 +56,9 @@ class Marker(object):
 	"""
 	def __init__(self,img,name,threshold):
 		self._img=img
+
 		# Close this immediately. DRY
-		img.close()
+		# img.close()
 
 		self.name = name
 		self.threshold = threshold
