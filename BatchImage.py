@@ -233,8 +233,8 @@ class BatchImage():
 			name = GetOverlayName(combination[0][1], combination[1].name)
 			values = GetValuesFromOverlay(combination[0][0],combination[1])
 			indices = GetIndicesFromOverlay(combination[0][0],combination[1])
-			print count 
-
+			print name
+			print values.mean()
 
 
 
