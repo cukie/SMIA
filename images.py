@@ -90,6 +90,7 @@ def LoopDirectory():
 			if whichone == 'mask':
 				# let's make a new mask and add it to our list
 				masks.append(BI.Mask(getImage(pic),name,threshold))
+				masks.append(BI.Mask(getImage(pic),name,threshold,makeNegative=True))
 			if whichone == 'marker':
 				markers.append(BI.Marker(getImage(pic),name,threshold))
 				

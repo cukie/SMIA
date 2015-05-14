@@ -1,0 +1,52 @@
+{
+    "base_directory": "/Users/cukierma/Documents/bitbucket_repos/imaging_stack/production_testers/test_images", 
+    "mark_opts": [
+        "MARK_INDI"
+    ], 
+    "marker_names": [
+        [
+            "active", 
+            "active",
+            55
+        ], 
+        [
+            "3D", 
+            "threed",
+            55
+        ], 
+                [
+            "nerve", 
+            "nail_biting",
+            55
+        ],
+        [
+            "7th", 
+            "seven",
+            55
+        ],
+        [
+            "epithelium", 
+            "epi",
+            55
+        ]
+    ], 
+    "mask_names": [
+        [
+            "nuclei", 
+            "center",
+            55
+        ],
+        [
+            "stroma", 
+            "whatttt",
+            55
+        ]
+    ], 
+    "mask_opts": [
+        "MASK_ALL"
+    ], 
+    "num_markers": 5, 
+    "num_masks": 2, 
+    "num_pictures": 7, 
+    "output_to": "/testing/out/path"
+}
