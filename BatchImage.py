@@ -145,9 +145,6 @@ class BatchImage():
 			mask = tuple(sorted(mask.split()))
 			self.mask_white_list[mask] = mask
 
-		# print self.mask_white_list
-		# print self.white_list
-
 		self.masks = []
 		for mask in mask_list:
 			if type(mask) is not Mask:
@@ -218,7 +215,6 @@ class BatchImage():
 						# like a cumsum of intersections...
 						output_mask = GetIntersection(output_mask,mask.masked_indices.flatten())
 					names = ', '.join(names)
-					# print names
 					# print output_mask.size
 					self.mask_tuples.append((output_mask, names))
 
@@ -245,7 +241,7 @@ class BatchImage():
 		for combination in itertools.product(self.mask_tuples,self.markers):
 			count+=1
 			name = GetOverlayName(combination[0][1], combination[1].name)
-
+			# print name
 			name_list = name.replace(',','')
 			name_list = name_list.split()
 			if self.InWhiteList(name_list):
@@ -274,25 +270,18 @@ class BatchImage():
 		not in our white list. 
 		"""
 
-		# First check if a mask and its inverse are together
-		for word in names:
-			if "NOT " + word in names:
-				return True
-		
-		# Now check out white list
-
 		tupnames = tuple(sorted(names))
-		if tupnames not in self.mask_white_list:
+		if tupnames in self.mask_white_list:
+			return False
+		else:
 			return True
-
-		return False
 
 	def InWhiteList(self,names):
 		"""
 		Returns true if a name is in the white list
 		"""
 		tupnames = tuple(sorted(names))
-		print tupnames
+		# print tupnames
 		if tupnames in self.white_list:
 			return True
 		else:
