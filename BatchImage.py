@@ -8,6 +8,8 @@ import operator
 import numpy as np 
 import itertools
 import sys
+from sets import Set
+
 
 def IndicesByThreshold(pixel_list,threshold,op):
 	"""
@@ -185,60 +187,58 @@ class BatchImage():
 		self.num_pixels = self.size[0] * self.size[1]
 
 		self.mask_tuples = []
-
-		# if mask operation is "MASK_ALL" we need to create the rest of our masks
-		if self.mask_opts == 'MASK_ALL':
-			self.CreateAllMasks()
-
-		self.CreateAllColocolizations()
-		#TODO: implement logic for collocalization
-		if mark_opts == 'MARK_COLLOC':
-			print "collocalization not supported yet"
-			exit(1)
-
-
+		self.colloc_tuples = []
+		
+		self.CreateAllColloc()
 
 	def CreateAllMasks(self):
 		"""
 		A helper that takes a list of masks and creates the powerset of them
 		minus the useless ones... Where useless is defined as a mask with 
 		itself and NOT itself in the same mask...
+
+		NOTE: does not include collocalized markers in masks 
 		"""
-		mask_list = self.masks
-		limit = self.num_pics
+		
+		self.mask_tuples = self.MasksFromList(self.masks,self.num_pics)
+
+	def CreateAllColloc(self):
+		"""
+		Creates all masks including those possibilities of 
+		collocalized masks.
+		"""
+		self.colloc_tuples = self.MasksFromList(self.markers + self.masks,self.num_pics)
+
+	def MasksFromList(self,mask_list,combination_max):
+		"""
+		Given a list of Mask or Marker objects
+		returns a list of all combinations of masks
+		in the form of a tuple. (mask_loc,name)
+		"""
+		mask_tuples = []
 		count = 0
-		for lim in xrange(1,limit+1):
-			for item in itertools.combinations(mask_list,lim):
-				
-				# Create our list of names
-				names = [x.name for x in item]
-				# If this combination is not useless...
-				if not self.IsUseless(names):
-					count += 1
-					sys.stdout.write("\rProcessing Mask %i" % count)
-					sys.stdout.flush()
-					# our original mask will have all indices in it
-					output_mask = np.arange(0,self.num_pixels)
-					for mask in item:
-						# like a cumsum of intersections...
-						output_mask = GetIntersection(output_mask,mask.masked_indices.flatten())
-					names = ', '.join(names)
-					# print output_mask.size
-					self.mask_tuples.append((output_mask, names))
-
+		for lim in xrange(1,combination_max+1):
+				for item in itertools.combinations(mask_list,lim):
+					
+					# Create our list of names
+					names = [x.name for x in item]
+					# If this combination is not useless...
+					if not self.IsUseless(names):
+						count += 1
+						sys.stdout.write("\rProcessing Mask %i" % count)
+						sys.stdout.flush()
+						# our original mask will have all indices in it
+						output_mask = np.arange(0,self.num_pixels)
+						for mask in item:
+							# like a cumsum of intersections...
+							output_mask = GetIntersection(output_mask,mask.masked_indices.flatten())
+						names = ', '.join(names)
+						# print output_mask.size
+						mask_tuples.append((output_mask, names))
 		sys.stdout.write("\n")
-		# print len(self.mask_tuples)
 
-	def CreateAllColocolizations(self):
-		"""
-		A collocalization is a mask with markers
-		mixed into it. It works the same way as a 
-		regular mask, but incorporates all of the 
-		markers as masks. 
-		"""
+		return mask_tuples
 
-		colloc_list = self.masks + self.markers 
-		print colloc_list
 
 
 	def PerformOps(self,mask_opts,marker_opts):
@@ -252,7 +252,7 @@ class BatchImage():
 		count = 0 
 		# We are basically going to take the entire mask_tuples 
 		# structure and overlay it with every marker. 
-		for combination in itertools.product(self.mask_tuples,self.markers):
+		for combination in itertools.product(self.colloc_tuples,self.markers):
 			count+=1
 			name = GetOverlayName(combination[0][1], combination[1].name)
 			# print name

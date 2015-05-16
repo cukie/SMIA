@@ -80,7 +80,7 @@ def LoopDirectory():
 	# open the file... and perform the given operations for each entry
 	count = 1
 	for directory in listdir_fullpath(base_dir):
-		print "processing directory: " + str(count) 
+		print "processing directory: " + directory.split(base_dir+"/")[1]
 		count += 1
 		masks = []
 		markers = []
