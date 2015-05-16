@@ -92,7 +92,7 @@ def LoopDirectory():
 				masks.append(BI.Mask(getImage(pic),name,threshold,makeNegative=True))
 			if whichone == 'marker':
 				markers.append(BI.Marker(getImage(pic),name,threshold))
-				
+				markers.append(BI.Marker(getImage(pic),name,threshold,makeNegative=True))
 
 		# now let's create a batch image object
 		# We pass in num_layers because Batch_image

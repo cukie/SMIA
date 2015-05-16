@@ -84,7 +84,7 @@ class Mask(object):
 			op = operator.lt
 		else:
 			self.name = name
-			op = operator.gt 			
+			op = operator.ge 			
 
 		self.masked_indices = IndicesByThreshold(self.pixel_list, self.threshold,op)
 
@@ -101,12 +101,19 @@ class Marker(object):
 	in our own concept of a marker. It's a way to logically
 	separate the Marker images from the Mask images.
 	"""
-	def __init__(self,img,name,threshold):
+	def __init__(self,img,name,threshold,makeNegative=False):
 		self._img = img
-		self.name = name
-		self.threshold = threshold
+		op = None
+		if makeNegative:
+			self.name = "NOT"+name
+			op = operator.lt
+		else:
+			self.name = name
+			op = operator.ge
+		self.threshold = threshold		
 		self.pixel_list = list(img.getdata())
-		self.masked_indices = IndicesByThreshold(self.pixel_list,self.threshold,operator.gt)
+		self.masked_indices = IndicesByThreshold(self.pixel_list,self.threshold,op)
+
 
 	# Delegate all of Marker's inner functions to Image
 	# e.g. im.__getattr__('size') == im.size if there was no wrapper 
@@ -162,7 +169,7 @@ class BatchImage():
 
 		# Let's just make sure everything is here and consistent
 		# before we assign each value
-		if num_pics != (len(self.masks) / 2 + len(self.markers)):
+		if num_pics != (len(self.masks) / 2 + len(self.markers)/2):
 			raise ValueError("num_pics does not match the cumulative number of masks and markers passed into BatchImage instance.")
 		else:
 			self.num_pics = num_pics
@@ -183,6 +190,7 @@ class BatchImage():
 		if self.mask_opts == 'MASK_ALL':
 			self.CreateAllMasks()
 
+		self.CreateAllColocolizations()
 		#TODO: implement logic for collocalization
 		if mark_opts == 'MARK_COLLOC':
 			print "collocalization not supported yet"
@@ -221,11 +229,17 @@ class BatchImage():
 		sys.stdout.write("\n")
 		# print len(self.mask_tuples)
 
-	def CreateAllColocolizations():
+	def CreateAllColocolizations(self):
+		"""
+		A collocalization is a mask with markers
+		mixed into it. It works the same way as a 
+		regular mask, but incorporates all of the 
+		markers as masks. 
 		"""
 
-		"""
-		pass
+		colloc_list = self.masks + self.markers 
+		print colloc_list
+
 
 	def PerformOps(self,mask_opts,marker_opts):
 		"""
