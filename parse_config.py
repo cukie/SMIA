@@ -39,6 +39,7 @@ def ParseConfig(config_file):
 		configurations['mask_opts'] = data['mask_opts']
 		configurations['mark_opts'] = data['mark_opts']
 		configurations['output_path'] = data['output_to']
+		configurations['overlay_white_list'] = data['overlay_white_list']
 
 	# Let's validate our input... Hopefully catch errors early!
 	validated,message = TestConfigInput(configurations)

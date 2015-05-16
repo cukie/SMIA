@@ -62,18 +62,6 @@ def GetIntersection(arr1,arr2):
 	#TODO: check "true" flag... this could speed things up.
 	return np.intersect1d(arr1,arr2)
 
-def IsUseless(names):
-	"""
-	takes a proposed mask name and tells you if it's useless.
-	Useless is defined as a mask with itself and not itself 
-	within...
-	"""
-
-	for word in names:
-		if "NOT " + word in names:
-			return True
-	return False
-
 class Mask(object):
 	"""
 	A mask object is just a Pillow Image object wrapped up 
@@ -92,7 +80,7 @@ class Mask(object):
 		# check our flag to see get the right operator and name
 		op = None
 		if makeNegative:
-			self.name = "NOT " + name
+			self.name = "NOT" + name
 			op = operator.lt
 		else:
 			self.name = name
@@ -136,10 +124,30 @@ class BatchImage():
 	that should be performed on masks and markers.
 	"""
 
-	def __init__(self, mask_list, mark_list, num_pics, mask_opts,mark_opts):
+	def __init__(self, mask_list, mark_list, num_pics, mask_opts,mark_opts,white_list):
 
 		# as we iterate here - raise exception if these aren't masks
 		# and markers respectively
+		self.white_list = {}
+		self.mask_white_list = {}
+
+		for key in white_list:
+			key_list = key.replace(',','')
+			key_list = key_list.split()
+			tupname = tuple(sorted(key_list))
+			self.white_list[tupname] = tupname
+
+		for key in white_list:
+			# Grab the list of masks which comes after under
+			mask = key.split('under')[1]
+			mask = ''.join(mask)
+			mask = mask.replace(',','')
+			mask = tuple(sorted(mask.split()))
+			self.mask_white_list[mask] = mask
+
+		# print self.mask_white_list
+		# print self.white_list
+
 		self.masks = []
 		for mask in mask_list:
 			if type(mask) is not Mask:
@@ -200,7 +208,7 @@ class BatchImage():
 				# Create our list of names
 				names = [x.name for x in item]
 				# If this combination is not useless...
-				if not IsUseless(names):
+				if not self.IsUseless(names):
 					count += 1
 					sys.stdout.write("\rProcessing Mask %i" % count)
 					sys.stdout.flush()
@@ -237,11 +245,15 @@ class BatchImage():
 		for combination in itertools.product(self.mask_tuples,self.markers):
 			count+=1
 			name = GetOverlayName(combination[0][1], combination[1].name)
-			values = GetValuesFromOverlay(combination[0][0],combination[1])
-			indices = GetIndicesFromOverlay(combination[0][0],combination[1])
-			# print name
-			# print values.mean()
-			yield name
+
+			name_list = name.replace(',','')
+			name_list = name_list.split()
+			if self.InWhiteList(name_list):
+				values = GetValuesFromOverlay(combination[0][0],combination[1])
+				indices = GetIndicesFromOverlay(combination[0][0],combination[1])
+				# print name
+				# print values.mean()
+				yield name
 
 
 	def _Calculations(self,values,indices,overlay_name):
@@ -252,6 +264,38 @@ class BatchImage():
 
 		E.g. calculations['mean'] = mean_value
 		"""
+	def IsUseless(self,names):
+		"""
+		takes a proposed mask name and tells you if it's useless.
+		Useless is defined as a mask with itself and not itself 
+		within one name.
 
+		Extended to also define Useless as a mask combination
+		not in our white list. 
+		"""
+
+		# First check if a mask and its inverse are together
+		for word in names:
+			if "NOT " + word in names:
+				return True
+		
+		# Now check out white list
+
+		tupnames = tuple(sorted(names))
+		if tupnames not in self.mask_white_list:
+			return True
+
+		return False
+
+	def InWhiteList(self,names):
+		"""
+		Returns true if a name is in the white list
+		"""
+		tupnames = tuple(sorted(names))
+		print tupnames
+		if tupnames in self.white_list:
+			return True
+		else:
+			return False 
 
 

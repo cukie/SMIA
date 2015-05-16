@@ -21,6 +21,7 @@ mask_names = []
 marker_names = []
 mask_opts = []
 mark_opts = []
+white_list = {}
 
 output_path = None
 
@@ -97,11 +98,13 @@ def LoopDirectory():
 		# We pass in num_layers because Batch_image
 		# constructor will make sure nothing has gone 
 		# wrong... a kind of delegation of error checking
-		batch = BI.BatchImage(masks,markers,num_layers,mask_opts,mark_opts)
+		batch = BI.BatchImage(masks,markers,num_layers,mask_opts,mark_opts,white_list)
 		for result in batch.PerformOps(mask_opts,mark_opts):
-			sys.stdout.write("\rCreating Overlay %s" % result)
-			sys.stdout.flush()
-		
+			time1 = time.time()
+			# sys.stdout.write("\rCreating Overlay %s" % result)
+			# sys.stdout.flush()
+			print "Creating Overlay " + result
+		print ''
 
 def ConfigDictToGlobals(config_dict):
 	"""
@@ -110,7 +113,7 @@ def ConfigDictToGlobals(config_dict):
 	Note: This subroutine is defined ONLY for its side effects.
 	"""
 	# We're writing to gloabsl here...
-	global base_dir,num_layers,num_masks,num_markers,mask_names,marker_names,mask_opts,mark_opts,output_path
+	global base_dir,num_layers,num_masks,num_markers,mask_names,marker_names,mask_opts,mark_opts,output_path, white_list
 
 	base_dir = config_dict['base_dir']
 	num_layers = config_dict['num_layers']
@@ -121,6 +124,9 @@ def ConfigDictToGlobals(config_dict):
 	mask_opts = config_dict['mask_opts']
 	mark_opts = config_dict['mark_opts']
 	output_path = config_dict['output_path']
+	# We want this as a dictionary for faster lookups
+	for sentence in config_dict['overlay_white_list']:
+		white_list[sentence] = sentence
 
 
 output_path = None
@@ -135,8 +141,9 @@ def main(config_file):
 	# Set our configuration variables
 	ConfigDictToGlobals(config_dict)
 	# Here's where the magic happens
+	time1 = time.time()
 	LoopDirectory()
-
+	print time.time() - time1
 	# print some success messages
 	# ToDo: bundle this up into its own method
 	print
@@ -148,6 +155,7 @@ def main(config_file):
 
 if __name__ == '__main__':
 	main(sys.argv[1])
+
 	# for i in xrange(15):
 	# 	time1 = time.time()
 	# 	main()
