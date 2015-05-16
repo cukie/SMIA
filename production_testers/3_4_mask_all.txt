@@ -6,17 +6,17 @@
     "marker_names": [
         [
             "active", 
-            "active",
+            "netrin",
             55
         ], 
         [
             "3D", 
-            "threed",
+            "ligand",
             55
         ], 
         [
-            "epithelium", 
-            "epi",
+            "7th", 
+            "nova",
             55
         ]
     ], 
@@ -24,22 +24,23 @@
         
         [
             "nerve", 
-            "nail_biting",
+            "nerve",
             55
         ],
-        [
-            "7th", 
-            "seven",
-            55
-        ],
+     
         [
             "nuclei", 
-            "center",
+            "nuclei",
             55
         ],
         [
             "stroma", 
-            "whatttt",
+            "stroma",
+            55
+        ],
+        [
+            "epithelium", 
+            "epi",
             55
         ]
     ], 
