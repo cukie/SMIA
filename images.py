@@ -84,8 +84,6 @@ def LoopDirectory():
 		masks = []
 		markers = []
 		for pic in listdir_fullpath(directory):
-			time1 = time.time()
-
 			whichone,prefix,name,threshold = MaskorMarker(pic)
 			if whichone == 'mask':
 				# let's make a new mask and add it to our list
@@ -94,14 +92,15 @@ def LoopDirectory():
 			if whichone == 'marker':
 				markers.append(BI.Marker(getImage(pic),name,threshold))
 				
-			print time.time() - time1
 
 		# now let's create a batch image object
 		# We pass in num_layers because Batch_image
 		# constructor will make sure nothing has gone 
 		# wrong... a kind of delegation of error checking
 		batch = BI.BatchImage(masks,markers,num_layers,mask_opts,mark_opts)
-		batch.PerformOps(mask_opts,mark_opts)
+		for result in batch.PerformOps(mask_opts,mark_opts):
+			sys.stdout.write("\rCreating Overlay %s" % result)
+			sys.stdout.flush()
 		
 
 def ConfigDictToGlobals(config_dict):

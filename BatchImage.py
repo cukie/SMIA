@@ -202,7 +202,8 @@ class BatchImage():
 				# If this combination is not useless...
 				if not IsUseless(names):
 					count += 1
-					print count
+					sys.stdout.write("\rProcessing Mask %i" % count)
+					sys.stdout.flush()
 					# our original mask will have all indices in it
 					output_mask = np.arange(0,self.num_pixels)
 					for mask in item:
@@ -213,9 +214,14 @@ class BatchImage():
 					# print output_mask.size
 					self.mask_tuples.append((output_mask, names))
 
-		print len(self.mask_tuples)
+		sys.stdout.write("\n")
+		# print len(self.mask_tuples)
 
+	def CreateAllColocolizations():
+		"""
 
+		"""
+		pass
 
 	def PerformOps(self,mask_opts,marker_opts):
 		"""
@@ -233,8 +239,19 @@ class BatchImage():
 			name = GetOverlayName(combination[0][1], combination[1].name)
 			values = GetValuesFromOverlay(combination[0][0],combination[1])
 			indices = GetIndicesFromOverlay(combination[0][0],combination[1])
-			print name
-			print values.mean()
+			# print name
+			# print values.mean()
+			yield name
+
+
+	def _Calculations(self,values,indices,overlay_name):
+		"""
+		returns a dictionary of keys and values where
+		key is operation name and value is the result of 
+		the named operation.
+
+		E.g. calculations['mean'] = mean_value
+		"""
 
 
 

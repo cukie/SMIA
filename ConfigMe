@@ -37,5 +37,9 @@
     "num_markers": "number of markers", 
     "num_masks": "number of masks", 
     "num_pictures": "number of layers", 
-    "output_to": "full output path"
+    "output_to": "full output path", 
+    "overlay_white_list": [
+        "list of overlays to perform", 
+        "e.g. marker1 under mask1, mask2, NOT mask3"
+    ]
 }
