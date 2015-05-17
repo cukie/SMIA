@@ -264,29 +264,48 @@ class BatchImage():
 			name_list = name.replace(',','')
 			name_list = name_list.split()
 			if self.InWhiteList(name_list):
-				# results go here under name, value pairs in dict
-				result_dict = OrderedDict()
+				
+				# Get the values and indices from this overlay
 				values = GetValuesFromOverlay(mask_indices,marker)
 				indices = GetIndicesFromOverlay(mask_indices,marker)
-				# print name
-				# print values.mean()
-				result_dict[name + ' mean'] = values.mean()
-				result_dict[name + ' median'] = np.median(values)
-				result_dict[name + ' st.dev'] = values.std()
-				result_dict[name + ' pcnt. coverage r.t. image'] = repr((float(values.size)/self.num_pixels) * 100)
-				result_dict[name + ' pcnt. coverage r.t. mask'] = repr((float(values.size)/mask_indices.size) * 100)
-				result_dict[name + ' total intensity'] = values.cumsum()[-1]
+
+				# You can change which calculations are performed by
+				# editing the _Calculations function
+
+				result_dict = self._Calculations(values,indices,mask_indices,name)
+				# Generators rock
 				yield result_dict
 
 
-	def _Calculations(self,values,indices,overlay_name):
+	def _Calculations(self,result_values,result_indices,mask_indices,name):
 		"""
-		returns a dictionary of keys and values where
+		returns an OrderedDict of keys and values where
 		key is operation name and value is the result of 
 		the named operation.
 
-		E.g. calculations['mean'] = mean_value
+		You can change which calculations are performed by
+		editing this function. Please don't delete existing
+		calculations, just comment them out (you might want
+		them later!). Each entry should be of the form:
+		
+		result_dict['calculation name'] = result_value
+
+		E.g. calculations['<overlay name>' + 'mean'] = mean_value
 		"""
+
+		# results go here under name, value pairs in dict
+		result_dict = OrderedDict()
+
+		# Add or remove(comment out) calculations here
+		result_dict[name + ' mean'] = result_values.mean()
+		result_dict[name + ' median'] = np.median(result_values)
+		result_dict[name + ' st.dev'] = result_values.std()
+		result_dict[name + ' pcnt. coverage r.t. image'] = repr((float(result_values.size)/self.num_pixels) * 100)
+		result_dict[name + ' pcnt. coverage r.t. mask'] = repr((float(result_values.size)/float(mask_indices.size)) * 100)
+		result_dict[name + ' total intensity'] = result_values.cumsum()[-1]
+
+		return result_dict
+
 	def IsUseless(self,names):
 		"""
 		takes a proposed mask name and tells you if it's useless.
