@@ -3,6 +3,20 @@
 # Creation Date: 5/4/15
 # (c) All Rights Reserved
 
+"""
+The BatchImage module defines Mask Objects and Marker Objects.
+Most importantly it defines BatchImage Objects which are aggregations
+of masks and markers (maybe a tiff stack...). 
+
+Additionally, it defines the functions used to analyze the overlaying of 
+masks and markers. A typical pseudo-code usage definition is as follows:
+		Create mask objects
+		Create marker objects
+		Create BatchImage object from Mask and Marker Objects
+		Call PerformOps() to get an OrderedDict of results for each overlay
+			defined in your white_list  
+"""
+
 from PIL import Image
 import operator
 import numpy as np 
@@ -10,6 +24,7 @@ import itertools
 import sys
 from sets import Set
 from collections import OrderedDict
+
 
 class Mask(object):
 	"""
