@@ -31,9 +31,9 @@ def ParseConfig(config_file):
 		data = json.load(config)
 		# load these values into our globals...
 		configurations['base_dir'] = data['base_directory']
-		configurations['num_layers']= data['num_pictures']
-		configurations['num_masks'] = data['num_masks']
-		configurations['num_markers'] = data['num_markers']
+		configurations['num_layers']= int(data['num_pictures'])
+		configurations['num_masks'] = int(data['num_masks'])
+		configurations['num_markers'] = int(data['num_markers'])
 		configurations['mask_names'] = data['mask_names']
 		configurations['marker_names'] = data['marker_names']
 		configurations['mask_opts'] = data['mask_opts']
