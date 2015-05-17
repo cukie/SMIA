@@ -42,8 +42,12 @@
     "num_pictures": 5, 
     "output_to": "/Users/cukierma/Documents/bitbucket_repos/imaging_stack/results_test",
     "overlay_white_list": [
-        "SNAKA under mAb11, SNAKA, stroma, NOTepi",
-        "mAb11 under stroma, NOTepi"
+        "SNAKA under stroma, NOTepi",
+        "SNAKA under NOTmAb11, stroma, NOTepi",
 
+        "mAb11 under stroma, NOTepi",
+        "SNAKA under mAb11, stroma, NOTepi",
+        "mAb11 under NOTSNAKA, stroma, NOTepi",
+        "mAb11 under SNAKA, stroma, NOTepi"
     ]
 }
