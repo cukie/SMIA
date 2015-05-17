@@ -11,6 +11,8 @@ import BatchImage as BI
 import parse_config as pc 
 import time
 import csv
+from collections import OrderedDict
+import json 
 
 
 ######## GLOBAL CONFIGURATION VARIABLES ############
@@ -104,15 +106,15 @@ def LoopDirectory():
 		# wrong... a kind of delegation of error checking
 		batch = BI.BatchImage(masks,markers,num_layers,mask_opts,mark_opts,white_list)
 		
-		output_dict = {}
+		output_dict = OrderedDict()
 		# make sure we always have a directory name
-		output_dict['Directory Name'] = base_dir
+		output_dict['Directory Name'] = directory
 
 		for results in batch.PerformOps(mask_opts,mark_opts):
 			# grab the results tuple and add to output dictionary
 			output_dict = MergeDicts(output_dict,results)
 		# The first directory, we need to throw the headings in
-		
+		# print output_dict
 		if count == 1:
 			fieldnames = list(output_dict.keys())
 			writer = csv.DictWriter(f, fieldnames=fieldnames,dialect='excel')
@@ -170,6 +172,8 @@ def main(config_file):
 	# Here's where the magic happens
 	time1 = time.time()
 	LoopDirectory()
+	with open(output_path+"/used_config.txt",'w') as c:
+		json.dump(config_dict,c)
 	print time.time() - time1
 	# print some success messages
 	# ToDo: bundle this up into its own method

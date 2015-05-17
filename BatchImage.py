@@ -9,6 +9,7 @@ import numpy as np
 import itertools
 import sys
 from sets import Set
+from collections import OrderedDict
 
 
 def IndicesByThreshold(pixel_list,threshold,op):
@@ -254,17 +255,27 @@ class BatchImage():
 		# structure and overlay it with every marker. 
 		for combination in itertools.product(self.colloc_tuples,self.markers):
 			count+=1
-			name = GetOverlayName(combination[0][1], combination[1].name)
+			mask_indices = combination[0][0]
+			mask_name = combination[0][1]
+			marker = combination[1]
+
+			name = GetOverlayName(mask_name, marker.name)
 			# print name
 			name_list = name.replace(',','')
 			name_list = name_list.split()
 			if self.InWhiteList(name_list):
 				# results go here under name, value pairs in dict
-				result_dict = {}
-				values = GetValuesFromOverlay(combination[0][0],combination[1])
-				indices = GetIndicesFromOverlay(combination[0][0],combination[1])
+				result_dict = OrderedDict()
+				values = GetValuesFromOverlay(mask_indices,marker)
+				indices = GetIndicesFromOverlay(mask_indices,marker)
 				# print name
 				# print values.mean()
+				result_dict[name + ' mean'] = values.mean()
+				result_dict[name + ' median'] = np.median(values)
+				result_dict[name + ' st.dev'] = values.std()
+				result_dict[name + ' pcnt. coverage r.t. image'] = repr((float(values.size)/self.num_pixels) * 100)
+				result_dict[name + ' pcnt. coverage r.t. mask'] = repr((float(values.size)/mask_indices.size) * 100)
+				result_dict[name + ' total intensity'] = values.cumsum()[-1]
 				yield result_dict
 
 
