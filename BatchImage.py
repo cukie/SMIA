@@ -201,7 +201,7 @@ class BatchImage():
 
 
 
-    def PerformOps(self, mask_opts, marker_opts):
+    def PerformOps(self, mask_opts, marker_opts, imageout=False, thumbnails=False):
         """
         Uses the mask_opts and mark_opts to decide which
         operations to perform. Performs them, and returns a
