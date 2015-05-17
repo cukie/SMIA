@@ -89,7 +89,7 @@ def LoopDirectory():
 	count = 0
 	for directory in listdir_fullpath(base_dir):
 		count += 1
-		print "processing directory: " + directory.split(base_dir+"/")[1]
+		print "processing directory: " + directory.split(base_dir)[1]
 		masks = []
 		markers = []
 		for pic in listdir_fullpath(directory):
