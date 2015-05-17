@@ -10,6 +10,7 @@ import itertools
 import BatchImage as BI 
 import parse_config as pc 
 import time
+import csv
 
 
 ######## GLOBAL CONFIGURATION VARIABLES ############
@@ -77,11 +78,14 @@ def LoopDirectory():
 	for the options for toPerform.
 	"""
 
+	# open our results file
+	f = open(output_path+"/results.csv",'wb')
+	writer = None
 	# open the file... and perform the given operations for each entry
-	count = 1
+	count = 0
 	for directory in listdir_fullpath(base_dir):
-		print "processing directory: " + directory.split(base_dir+"/")[1]
 		count += 1
+		print "processing directory: " + directory.split(base_dir+"/")[1]
 		masks = []
 		markers = []
 		for pic in listdir_fullpath(directory):
@@ -99,12 +103,35 @@ def LoopDirectory():
 		# constructor will make sure nothing has gone 
 		# wrong... a kind of delegation of error checking
 		batch = BI.BatchImage(masks,markers,num_layers,mask_opts,mark_opts,white_list)
-		for result in batch.PerformOps(mask_opts,mark_opts):
-			time1 = time.time()
-			# sys.stdout.write("\rCreating Overlay %s" % result)
-			# sys.stdout.flush()
-			print "Creating Overlay " + result
-		print ''
+		
+		output_dict = {}
+		# make sure we always have a directory name
+		output_dict['Directory Name'] = base_dir
+
+		for results in batch.PerformOps(mask_opts,mark_opts):
+			# grab the results tuple and add to output dictionary
+			output_dict = MergeDicts(output_dict,results)
+		# The first directory, we need to throw the headings in
+		
+		if count == 1:
+			fieldnames = list(output_dict.keys())
+			writer = csv.DictWriter(f, fieldnames=fieldnames,dialect='excel')
+			writer.writeheader()
+		# Fill in our rows
+		writer.writerow(output_dict)
+
+
+
+
+def MergeDicts(dict1,dict2):
+	"""
+	Takes two dictionaries and merges them.
+	"""
+
+	x = dict1.copy()
+	x.update(dict2)
+
+	return x
 
 def ConfigDictToGlobals(config_dict):
 	"""

@@ -259,11 +259,13 @@ class BatchImage():
 			name_list = name.replace(',','')
 			name_list = name_list.split()
 			if self.InWhiteList(name_list):
+				# results go here under name, value pairs in dict
+				result_dict = {}
 				values = GetValuesFromOverlay(combination[0][0],combination[1])
 				indices = GetIndicesFromOverlay(combination[0][0],combination[1])
 				# print name
 				# print values.mean()
-				yield name
+				yield result_dict
 
 
 	def _Calculations(self,values,indices,overlay_name):
