@@ -2,7 +2,44 @@ SMI-Analyzer
 
 Simultaneous Multichannel Immunofluorescense Digital Imaging Analyzer
 
-Blurb about what this does at a high level
+This application was created to bulk process and analyze batches of monochromatic images providing localization(masks), intensities, and similar quantifying values(markers), including collocalizations of multichannel monochromatic imunofluorescent images.
+
+It can output both image and value(excel) outputs. 
+
+It was originally developed for use in:
+	J. Franco-Barraza et.al 2015 at the Cukierman Lab Fox Chase Cancer Center
+
+
+PLEASE FOLLOW THE INSTALLATION AND CONFIGURATION INSTRUCTIONS CAREFULLY, AS THEY CAN SEEM A BIT COMPLICATED AT FIRST. 
+
+Image Format and Directory Structure:
+====================================
+The "base directory" will be a folder that holds all other folders. A typical file structure for analyzation MUST be of this form:
+
+	Base_Directory
+		-> Batch1_Directory
+			-> Image1
+			-> Image2
+			-> Image3
+			-> Image4
+			-> Image5
+			... no limit on picture numbers
+
+		-> Batch2_Directory
+                        -> Image1
+                        -> Image2
+                        -> Image3
+                        -> Image4
+                        -> Image5
+                        ... all directories must contain same number of images
+
+		-> More_Batches!!!!!
+                        -> Image1
+                        -> Image2
+                        -> Image3
+                        -> Image4
+                        -> Image5
+                        ... name your images whatever you want but stay consistent between batches. 
 
 Installation:
 =============
