@@ -35,6 +35,7 @@ def listdir_fullpath(d):
 	but returns the absolute paths of all children instead
 	of the relative paths
 	"""
+
 	return [os.path.join(d, f) for f in os.listdir(d)]
 
 # returns an image object from the given filepath
@@ -43,6 +44,7 @@ def getImage(filepath):
 	Given a filepath, returns an Image object of
 	the image in that filepath
 	"""
+
 	im = Image.open(filepath)
 
 	return im 
@@ -141,7 +143,8 @@ def ConfigDictToGlobals(config_dict):
 	and puts it into our appropriate global variables.
 	Note: This subroutine is defined ONLY for its side effects.
 	"""
-	# We're writing to gloabsl here...
+
+	# We're writing to globals here...
 	global base_dir,num_layers,num_masks,num_markers,mask_names,marker_names,mask_opts,mark_opts,output_path, white_list
 
 	base_dir = config_dict['base_dir']
@@ -160,21 +163,21 @@ def ConfigDictToGlobals(config_dict):
 
 output_path = None
 def main(config_file):
-		# parse the json configuration file
+	# parse the json configuration file
 	success,message,config_dict = pc.ParseConfig(config_file)
 	if not success:
 		print "ERRORS: \n" + message
 		sys.exit(1)
 	else:
 		print message 
+
 	# Set our configuration variables
 	ConfigDictToGlobals(config_dict)
+
 	# Here's where the magic happens
-	time1 = time.time()
 	LoopDirectory()
 	with open(output_path+"/used_config.txt",'w') as c:
-		json.dump(config_dict,c)
-	print time.time() - time1
+		json.dump(config_dict,c,indent=4, sort_keys=True)
 	# print some success messages
 	# ToDo: bundle this up into its own method
 	print
