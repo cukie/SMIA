@@ -11,60 +11,6 @@ import sys
 from sets import Set
 from collections import OrderedDict
 
-
-def IndicesByThreshold(pixel_list,threshold,op):
-	"""
-	Returns a numpy array of indices such that each 
-	item in the array is an index of the input list
-	as identified by the op parameter.
-
-	E.g. if you want all indices where the pixel value
-	is greater than the threshold, pass in 'operator.gt'
-	"""
-
-	pixel_arr = np.asarray(pixel_list)
-	indices = np.argwhere(op(pixel_arr,threshold))
-	return indices 
-
-
-def GetValuesFromOverlay(mask_indices,marker):
-	"""
-	Reveals the values of a marker underneath a mask.
-	Takes in a numpy array of valid indices and returns
-	a numpy array of marker values at those indices. 
-	"""
-
-	# First we need just those indices that satisfy both thresholds
-	indices = GetIntersection(mask_indices,marker.masked_indices)
-	# Also grab an array of all marker pixel values
-	marker_pixels = np.asarray(marker.pixel_list)
-
-	# give me the values of marker_pixels under our indices
-	values = marker_pixels[indices.flatten()]
-
-	return values
-
-def GetIndicesFromOverlay(mask_indices,marker):
-	"""
-	returns indices from an overlay.
-	Logic is simple - but semantically this makes 
-	more sense
-	"""
-
-	return mask_indices
-
-def GetOverlayName(mask_name,marker_name):
-	return marker_name + " under " + mask_name
-
-def GetIntersection(arr1,arr2):
-	"""
-	given two arrays, returns an array with the GetArrIntersection
-	of values
-	"""
-
-	#TODO: check "true" flag... this could speed things up.
-	return np.intersect1d(arr1,arr2)
-
 class Mask(object):
 	"""
 	A mask object is just a Pillow Image object wrapped up 
@@ -332,5 +278,56 @@ class BatchImage():
 			return True
 		else:
 			return False 
+def IndicesByThreshold(pixel_list,threshold,op):
+	"""
+	Returns a numpy array of indices such that each 
+	item in the array is an index of the input list
+	as identified by the op parameter.
 
+	E.g. if you want all indices where the pixel value
+	is greater than the threshold, pass in 'operator.gt'
+	"""
+
+	pixel_arr = np.asarray(pixel_list)
+	indices = np.argwhere(op(pixel_arr,threshold))
+	return indices 
+
+
+def GetValuesFromOverlay(mask_indices,marker):
+	"""
+	Reveals the values of a marker underneath a mask.
+	Takes in a numpy array of valid indices and returns
+	a numpy array of marker values at those indices. 
+	"""
+
+	# First we need just those indices that satisfy both thresholds
+	indices = GetIntersection(mask_indices,marker.masked_indices)
+	# Also grab an array of all marker pixel values
+	marker_pixels = np.asarray(marker.pixel_list)
+
+	# give me the values of marker_pixels under our indices
+	values = marker_pixels[indices.flatten()]
+
+	return values
+
+def GetIndicesFromOverlay(mask_indices,marker):
+	"""
+	returns indices from an overlay.
+	Logic is simple - but semantically this makes 
+	more sense
+	"""
+
+	return mask_indices
+
+def GetOverlayName(mask_name,marker_name):
+	return marker_name + " under " + mask_name
+
+def GetIntersection(arr1,arr2):
+	"""
+	given two arrays, returns an array with the GetArrIntersection
+	of values
+	"""
+
+	#TODO: check "true" flag... this could speed things up.
+	return np.intersect1d(arr1,arr2)
 
