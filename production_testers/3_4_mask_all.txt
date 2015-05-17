@@ -53,6 +53,6 @@
     "output_to": "/Users/cukierma/Documents/bitbucket_repos/imaging_stack/results_test",
     "overlay_white_list": [
         "netrin under nuclei, nerve, NOTstroma",
-        "NOTligand under ligand, netrin, nuclei"
+        "ligand under ligand, netrin, nuclei"
     ]
 }
