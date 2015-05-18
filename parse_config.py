@@ -63,8 +63,6 @@ def TestConfigInput(config_dict):
 	num_markers = config_dict['num_markers']
 	mask_names = config_dict['mask_names']
 	marker_names = config_dict['marker_names']
-	mask_opts = config_dict['mask_opts']
-	mark_opts = config_dict['mark_opts']
 	output_path = config_dict['output_path']
 
 	############ Allowable Operation Values ##########
@@ -90,18 +88,6 @@ def TestConfigInput(config_dict):
 	if len(marker_names) < 1:
 		messages.append("Please specify the number of markers for this run in the configuration file \n")
 
-	# all operations must be in our predefined list of
-	# acceptable operations. Defined at top of this 
-	# function 
-
-	# A mask operation can only be one of two options and not both
-	if len(mask_opts) !=1 or mask_opts[0] not in allowable_mask:
-		messages.append("Error in mask operation chosen. Please choose exactly one of the two allowable values - see usage notes")
-
-	# We only do one mask or marker operation at a time...
-	# Sorry....
-	if len(mark_opts) !=1 or mark_opts[0] not in allowable_mark:
-		messages.append("Error in marker operation chosen. Please choose exactly one of the three allowable values - see usage notes")
 
 	if output_path == "full output path" or output_path == None:
 		messages.append("Please specify an output path in the configuration file\n")

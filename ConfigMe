@@ -1,10 +1,5 @@
 {
     "base_directory": "full path", 
-    "mark_opts": [
-        "list of marker operations", 
-        "see usages notes", 
-        "e.g. MARK_INDI"
-    ], 
     "marker_names": [
         [
             "file_prefix", 
@@ -28,11 +23,6 @@
             "name", 
             "threshold"
         ]
-    ], 
-    "mask_opts": [
-        "list of mask operations", 
-        "see usages notes", 
-        "e.g. MASK_INDI"
     ], 
     "num_markers": "number of markers", 
     "num_masks": "number of masks", 

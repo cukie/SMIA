@@ -208,9 +208,12 @@ class BatchImage():
         Will return empty list if makeimages 
         is set to False 
         """
+        count = 0
         for image in self.full_results:
+            count+=1
             yield image
-            
+            if count == len(self.full_results):
+                del self.full_results
 
     def AllResultThumbnails(self):
         """
@@ -219,8 +222,12 @@ class BatchImage():
         is set to False
         """
 
+        count = 0
         for image in self.thumbnail_results:
+            count+=1
             yield image
+        if count == len(self.thumbnail_results):
+            del self.thumbnail_results
 
     def PerformOps(self, imageout=False, thumbnails=False):
         """
@@ -285,14 +292,35 @@ class BatchImage():
         result_dict = OrderedDict()
 
         # Add or remove(comment out) calculations here
-        result_dict[name + ' mean'] = result_values.mean()
-        result_dict[name + ' median'] = np.median(result_values)
-        result_dict[name + ' st.dev'] = result_values.std()
-        result_dict[name + ' pcnt. coverage r.t. image'] = repr((float(result_values.size)/self.num_pixels) * 100)
-        result_dict[name + ' pcnt. coverage r.t. mask'] = repr((float(result_values.size)/float(mask_indices.size)) * 100)
-        result_dict[name + ' total intensity'] = result_values.cumsum()[-1]
-        result_dict[name + 'integrated intensity r.t. mask'] = float(result_values.cumsum()[-1])/mask_indices.size
-        
+        try:
+            result_dict[name + ' mean'] = result_values.mean()
+        except:
+            pass
+        try:
+            result_dict[name + ' median'] = np.median(result_values)
+        except:
+            pass
+        try:
+            result_dict[name + ' st.dev'] = result_values.std()
+        except:
+            pass
+        try: 
+            result_dict[name + ' pcnt. coverage r.t. image'] = repr((float(result_values.size)/self.num_pixels) * 100)
+        except: 
+            pass
+        try:
+            result_dict[name + ' pcnt. coverage r.t. mask'] = repr((float(result_values.size)/float(mask_indices.size)) * 100)
+        except:
+            pass
+        try:
+            result_dict[name + ' total intensity'] = result_values.cumsum()[-1]
+        except:
+            pass
+        try:
+            result_dict[name + 'integrated intensity r.t. mask'] = float(result_values.cumsum()[-1])/mask_indices.size
+        except:
+            pass
+            
         return result_dict
 
     def IsUseless(self, names):
@@ -321,6 +349,7 @@ class BatchImage():
             return True
         else:
             return False
+
     def MakeMaskImage(self,mask_indices):
         """
         Given a list of mask indices, returns an image representation
@@ -352,7 +381,7 @@ class BatchImage():
 
         pixel_list = np.asarray(marker.pixel_list)
 
-        print pixel_list
+        # print pixel_list
 
         for index in indices:
             ret_image[index] = pixel_list[index]
@@ -373,7 +402,6 @@ class BatchImage():
         img = self.MakeMaskImage(mask_indices)
 
         img.thumbnail((128,128))
-        print img.size
         return img
 
     def MakeOverlayThumbnails(self, mask_indices, marker):

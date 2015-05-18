@@ -14,6 +14,7 @@ import csv
 from collections import OrderedDict
 import json 
 import ntpath
+import gc
 
 
 ######## GLOBAL CONFIGURATION VARIABLES ############
@@ -36,8 +37,8 @@ def listdir_fullpath(d):
 	but returns the absolute paths of all children instead
 	of the relative paths
 	"""
-
-	return [os.path.join(d, f) for f in os.listdir(d)]
+	for f in os.listdir(d):
+		yield os.path.join(d,f)
 
 # returns an image object from the given filepath
 def getImage(filepath):
@@ -72,7 +73,6 @@ def MaskorMarker(pic_path):
 			return ("marker",prefix,name,treshold)
 
 	raise ValueError("given marker or mask prefix not found while traversing directory")
-
 
 def LoopDirectory():
 	"""
@@ -129,7 +129,7 @@ def LoopDirectory():
 			writer.writeheader()
 
 		writer.writerow(output_dict)
-
+		del output_dict
 		if output_images:
 			# Create a folder for each batch for image results
 
@@ -141,7 +141,8 @@ def LoopDirectory():
 				name = image[1]
 
 				img.save(os.path.join(save_location, name + '.tif'))
-
+				img.close()
+				
 		if output_thumbnails:
 			# Create a folder for each batch for image results
 
@@ -152,9 +153,9 @@ def LoopDirectory():
 				img = image[0]
 				name = image[1]
 				img.save(os.path.join(save_location, name + '.jpg'))
-
+				img.close()
 		print time.time() - time1 
-		
+
 				
 
 

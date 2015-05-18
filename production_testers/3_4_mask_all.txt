@@ -1,8 +1,5 @@
 {
     "base_directory": "/Users/cukierma/Documents/bitbucket_repos/imaging_stack/production_testers/test_images", 
-    "mark_opts": [
-        "MARK_INDI"
-    ], 
     "marker_names": [
         [
             "active", 
@@ -44,15 +41,13 @@
             55
         ]
     ], 
-    "mask_opts": [
-        "MASK_ALL"
-    ], 
+    "output_images": true, 
+    "output_thumbnails": false, 
     "num_markers": 3, 
     "num_masks": 4, 
     "num_pictures": 7, 
     "output_to": "/Users/cukierma/Documents/bitbucket_repos/imaging_stack/results_test",
     "overlay_white_list": [
-        "netrin under nuclei, nerve, NOTstroma",
-        "ligand under ligand, netrin, nuclei"
+        "netrin under nuclei, nerve, NOTstroma"
     ]
 }
