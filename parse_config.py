@@ -40,7 +40,8 @@ def ParseConfig(config_file):
 		configurations['mark_opts'] = data['mark_opts']
 		configurations['output_path'] = data['output_to']
 		configurations['overlay_white_list'] = data['overlay_white_list']
-
+		configurations['output_images'] = data['output_images']
+		configurations['output_thumbnails'] = data['output_thumbnails']
 	# Let's validate our input... Hopefully catch errors early!
 	validated,message = TestConfigInput(configurations)
 

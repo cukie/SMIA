@@ -22,6 +22,7 @@ import numpy as np
 import itertools
 import sys
 from collections import OrderedDict
+from PIL import Image
 
 
 class Mask(object):
@@ -93,10 +94,13 @@ class BatchImage():
     that should be performed on masks and markers.
     """
 
-    def __init__(self, mask_list, mark_list, num_pics, mask_opts,mark_opts,white_list):
+    def __init__(self, mask_list, mark_list, num_pics, mask_opts,mark_opts,white_list,makeimages=False, makethumbnails=False):
 
-        # as we iterate here - raise exception if these aren't masks
-        # and markers respectively
+        # A couple of boolean values for later
+        self.makethumbnails = makethumbnails
+        self.makeimages = makeimages
+
+
         self.white_list = {}
         self.mask_white_list = {}
 
@@ -151,6 +155,9 @@ class BatchImage():
         
         self.CreateAllColloc()
 
+        self.full_results = []
+        self.thumbnail_results = []
+
     def CreateAllMasks(self):
         """
         A helper that takes a list of masks and creates the powerset of them
@@ -200,6 +207,25 @@ class BatchImage():
         return mask_tuples
 
 
+    def AllResultImages(self):
+        """
+        retrieve results images for the batch
+        Will return empty list if makeimages 
+        is set to False 
+        """
+        for image in self.full_results:
+            yield image
+            
+
+    def AllResultThumbnails(self):
+        """
+        retreive results thumbnails for the batch.
+        Will return empty list if makethumbnails
+        is set to False
+        """
+
+        for image in self.thumbnail_results:
+            yield image
 
     def PerformOps(self, mask_opts, marker_opts, imageout=False, thumbnails=False):
         """
@@ -227,13 +253,25 @@ class BatchImage():
                 values = GetValuesFromOverlay(mask_indices,marker)
                 indices = GetIndicesFromOverlay(mask_indices,marker)
 
+                if values.size != indices.size:
+                    print "WRONG"
+                    exit(1)
+                
+                # add images to image results
+                if self.makeimages:
+                    self.full_results.append((self.MakeMaskImage(mask_indices), name + " Mask"))
+                    self.full_results.append((self.MakeOverlayImage(mask_indices, marker), name + " Marker"))
+
+                # add thumbnails to image results
+                if self.makethumbnails:
+                    self.thumbnail_results.append((self.MakeMaskThumbnails(mask_indices), name + " Mask"))
+                    self.thumbnail_results.append((self.MakeOverlayThumbnails(mask_indices, marker), name + " Marker"))
+
                 # You can change which calculations are performed by
-                # editing the _Calculations function
-
+                # editing the _Calculations function   
                 result_dict = self._Calculations(values,indices,mask_indices,name)
-                # Generators rock
+                
                 yield result_dict
-
 
     def _Calculations(self, result_values ,result_indices ,mask_indices, name):
         """
@@ -261,7 +299,8 @@ class BatchImage():
         result_dict[name + ' pcnt. coverage r.t. image'] = repr((float(result_values.size)/self.num_pixels) * 100)
         result_dict[name + ' pcnt. coverage r.t. mask'] = repr((float(result_values.size)/float(mask_indices.size)) * 100)
         result_dict[name + ' total intensity'] = result_values.cumsum()[-1]
-
+        result_dict[name + 'integrated intensity r.t. mask'] = float(result_values.cumsum()[-1])/mask_indices.size
+        
         return result_dict
 
     def IsUseless(self, names):
@@ -290,6 +329,72 @@ class BatchImage():
             return True
         else:
             return False
+    def MakeMaskImage(self,mask_indices):
+        """
+        Given a list of mask indices, returns an image representation
+        of the mask with background black(0) and white masks area(255)
+        """
+
+        mask = np.zeros((self.num_pixels,))
+
+        for index in mask_indices:
+            mask[index] = 255 
+
+        image = Image.new(self.markers[0]._img.mode, self.markers[0].size)
+
+        image.putdata(mask.tolist())
+
+        return image 
+
+    def MakeOverlayImage(self,mask_indices,marker):
+        """
+        Given mask indices and a marker, returns an image
+        with a black background and the underlying marker 
+        pixels (only the marker pixels under the mask)
+        """
+
+        # initialize an empty array of zeros(black pixels)
+        ret_image = np.zeros((self.num_pixels,))
+
+        indices = GetIntersection(mask_indices,marker.masked_indices)
+
+        pixel_list = np.asarray(marker.pixel_list)
+
+        print pixel_list
+
+        for index in indices:
+            ret_image[index] = pixel_list[index]
+
+        # a new empty image of the same type and size as our mask/markers
+        image = Image.new(self.markers[0]._img.mode, self.markers[0].size)
+
+        image.putdata(ret_image.tolist())
+
+        return image 
+
+    def MakeMaskThumbnails(self, mask_indices):
+        """
+        delegates to MakeMaskImage and creates thumbnail
+        """
+
+        # delegation woohoo!
+        img = self.MakeMaskImage(mask_indices)
+
+        img.thumbnail((128,128))
+        print img.size
+        return img
+
+    def MakeOverlayThumbnails(self, mask_indices, marker):
+        """
+        delegates to MakeOverlayImage and creates thumbnail
+        """
+
+        # deeelegate good times, come on!
+        img = self.MakeOverlayImage(mask_indices, marker)
+
+        img.thumbnail((128,128))
+
+        return img
 
 def IndicesByThreshold(pixel_list, threshold, op):
     """
@@ -330,7 +435,7 @@ def GetIndicesFromOverlay(mask_indices, marker):
     more sense
     """
 
-    return mask_indices
+    return GetIntersection(mask_indices,marker.masked_indices)
 
 def GetOverlayName(mask_name, marker_name):
     return marker_name + " under " + mask_name
@@ -343,4 +448,6 @@ def GetIntersection(arr1, arr2):
 
     #TODO: check "true" flag... this could speed things up.
     return np.intersect1d(arr1, arr2)
+
+
 

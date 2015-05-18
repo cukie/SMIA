@@ -13,6 +13,7 @@ import time
 import csv
 from collections import OrderedDict
 import json 
+import ntpath
 
 
 ######## GLOBAL CONFIGURATION VARIABLES ############
@@ -25,6 +26,8 @@ marker_names = []
 mask_opts = []
 mark_opts = []
 white_list = {}
+output_images = False
+output_thumbnails = False
 
 output_path = None
 
@@ -88,10 +91,12 @@ def LoopDirectory():
 	# open the file... and perform the given operations for each entry
 	count = 0
 	for directory in listdir_fullpath(base_dir):
+		time1 = time.time()
 		count += 1
 		print "processing directory: " + directory.split(base_dir)[1]
 		masks = []
 		markers = []
+		save_location = ''
 		for pic in listdir_fullpath(directory):
 			whichone,prefix,name,threshold = MaskorMarker(pic)
 			if whichone == 'mask':
@@ -106,23 +111,56 @@ def LoopDirectory():
 		# We pass in num_layers because Batch_image
 		# constructor will make sure nothing has gone 
 		# wrong... a kind of delegation of error checking
-		batch = BI.BatchImage(masks,markers,num_layers,mask_opts,mark_opts,white_list)
+		batch = BI.BatchImage(masks,markers,num_layers,mask_opts,mark_opts,white_list,makeimages=output_images, makethumbnails=output_thumbnails)
 		
 		output_dict = OrderedDict()
 		# make sure we always have a directory name
 		output_dict['Directory Name'] = directory
 
+		images_list = []
+
 		for results in batch.PerformOps(mask_opts,mark_opts):
-			# grab the results tuple and add to output dictionary
+
 			output_dict = MergeDicts(output_dict,results)
+
 		# The first directory, we need to throw the headings in
 		# print output_dict
 		if count == 1:
 			fieldnames = list(output_dict.keys())
 			writer = csv.DictWriter(f, fieldnames=fieldnames,dialect='excel')
 			writer.writeheader()
-		# Fill in our rows
+
 		writer.writerow(output_dict)
+
+		if output_images:
+			# Create a folder for each batch for image results
+
+			save_location = os.path.join(output_path, ntpath.basename(directory) + " images")
+			os.makedirs(save_location)
+
+			for image in batch.AllResultImages():
+				img = image[0]
+				name = image[1]
+
+				img.save(os.path.join(save_location, name + '.tif'))
+
+		if output_thumbnails:
+			# Create a folder for each batch for image results
+
+			save_location = os.path.join(output_path, ntpath.basename(directory) + " thumbnails")
+			os.makedirs(save_location)
+
+			for image in batch.AllResultThumbnails():
+				img = image[0]
+				name = image[1]
+				img.save(os.path.join(save_location, name + '.jpg'))
+
+		print time.time() - time1 
+		
+				
+
+
+
 
 
 
@@ -145,7 +183,7 @@ def ConfigDictToGlobals(config_dict):
 	"""
 
 	# We're writing to globals here...
-	global base_dir,num_layers,num_masks,num_markers,mask_names,marker_names,mask_opts,mark_opts,output_path, white_list
+	global base_dir,num_layers,num_masks,num_markers,mask_names,marker_names,mask_opts,mark_opts,output_path, white_list, output_images,output_thumbnails
 
 	base_dir = config_dict['base_dir']
 	num_layers = config_dict['num_layers']
@@ -156,6 +194,8 @@ def ConfigDictToGlobals(config_dict):
 	mask_opts = config_dict['mask_opts']
 	mark_opts = config_dict['mark_opts']
 	output_path = config_dict['output_path']
+	output_images = config_dict['output_images']
+	output_thumbnails = config_dict['output_thumbnails']
 	# We want this as a dictionary for faster lookups
 	for sentence in config_dict['overlay_white_list']:
 		white_list[sentence] = sentence

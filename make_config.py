@@ -20,7 +20,8 @@ if __name__ == "__main__":
 	config['mask_opts'] = ['list of mask operations','see usages notes', 'e.g. MASK_INDI']
 	config['mark_opts'] = ['list of marker operations','see usages notes', 'e.g. MARK_INDI']
 	config['overlay_white_list'] = ['list of overlays to perform', 'e.g. marker1 under mask1, mask2, NOT mask3']
-
+	config['output_images'] = False
+	config['output_thumbnails'] = False
 	# output options
 	config['output_to'] = "full output path"
 
