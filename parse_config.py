@@ -36,8 +36,6 @@ def ParseConfig(config_file):
 		configurations['num_markers'] = int(data['num_markers'])
 		configurations['mask_names'] = data['mask_names']
 		configurations['marker_names'] = data['marker_names']
-		configurations['mask_opts'] = data['mask_opts']
-		configurations['mark_opts'] = data['mark_opts']
 		configurations['output_path'] = data['output_to']
 		configurations['overlay_white_list'] = data['overlay_white_list']
 		configurations['output_images'] = data['output_images']

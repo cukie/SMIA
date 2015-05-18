@@ -23,8 +23,6 @@ num_masks = None
 num_markers = None
 mask_names = []
 marker_names = []
-mask_opts = []
-mark_opts = []
 white_list = {}
 output_images = False
 output_thumbnails = False
@@ -111,7 +109,7 @@ def LoopDirectory():
 		# We pass in num_layers because Batch_image
 		# constructor will make sure nothing has gone 
 		# wrong... a kind of delegation of error checking
-		batch = BI.BatchImage(masks,markers,num_layers,mask_opts,mark_opts,white_list,makeimages=output_images, makethumbnails=output_thumbnails)
+		batch = BI.BatchImage(masks,markers,num_layers,white_list,makeimages=output_images, makethumbnails=output_thumbnails)
 		
 		output_dict = OrderedDict()
 		# make sure we always have a directory name
@@ -119,7 +117,7 @@ def LoopDirectory():
 
 		images_list = []
 
-		for results in batch.PerformOps(mask_opts,mark_opts):
+		for results in batch.PerformOps():
 
 			output_dict = MergeDicts(output_dict,results)
 
@@ -183,7 +181,7 @@ def ConfigDictToGlobals(config_dict):
 	"""
 
 	# We're writing to globals here...
-	global base_dir,num_layers,num_masks,num_markers,mask_names,marker_names,mask_opts,mark_opts,output_path, white_list, output_images,output_thumbnails
+	global base_dir,num_layers,num_masks,num_markers,mask_names,marker_names,output_path, white_list, output_images,output_thumbnails
 
 	base_dir = config_dict['base_dir']
 	num_layers = config_dict['num_layers']
@@ -191,8 +189,6 @@ def ConfigDictToGlobals(config_dict):
 	num_markers = config_dict['num_markers']
 	mask_names = config_dict['mask_names']
 	marker_names = config_dict['marker_names']
-	mask_opts = config_dict['mask_opts']
-	mark_opts = config_dict['mark_opts']
 	output_path = config_dict['output_path']
 	output_images = config_dict['output_images']
 	output_thumbnails = config_dict['output_thumbnails']

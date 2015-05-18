@@ -17,8 +17,6 @@ if __name__ == "__main__":
 	config['mask_names'] = [('file_prefix','name','threshold'),('file_prefix','name','threshold')]
 	config['num_markers'] = "number of markers"
 	config['marker_names'] = [('file_prefix','name','threshold'),('file_prefix','name','threshold')]
-	config['mask_opts'] = ['list of mask operations','see usages notes', 'e.g. MASK_INDI']
-	config['mark_opts'] = ['list of marker operations','see usages notes', 'e.g. MARK_INDI']
 	config['overlay_white_list'] = ['list of overlays to perform', 'e.g. marker1 under mask1, mask2, NOT mask3']
 	config['output_images'] = False
 	config['output_thumbnails'] = False

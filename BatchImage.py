@@ -94,7 +94,7 @@ class BatchImage():
     that should be performed on masks and markers.
     """
 
-    def __init__(self, mask_list, mark_list, num_pics, mask_opts,mark_opts,white_list,makeimages=False, makethumbnails=False):
+    def __init__(self, mask_list, mark_list, num_pics, white_list, makeimages=False, makethumbnails=False):
 
         # A couple of boolean values for later
         self.makethumbnails = makethumbnails
@@ -138,12 +138,7 @@ class BatchImage():
         if num_pics != (len(self.masks) / 2 + len(self.markers)/2):
             raise ValueError("num_pics does not match the cumulative number of masks and markers passed into BatchImage instance.")
         else:
-            self.num_pics = num_pics
-
-        # our operations for this batch... We can only have one operation for mask and marker...
-        self.mask_opts = mask_opts[0]
-        self.mark_opts = mark_opts[0]
-
+            self.num_pics = num_pics     
 
         # Let's keep a record of the total number of pixels in an image
         self.size = self.masks[0]._img.size
@@ -227,12 +222,9 @@ class BatchImage():
         for image in self.thumbnail_results:
             yield image
 
-    def PerformOps(self, mask_opts, marker_opts, imageout=False, thumbnails=False):
+    def PerformOps(self, imageout=False, thumbnails=False):
         """
-        Uses the mask_opts and mark_opts to decide which
-        operations to perform. Performs them, and returns a
-        dictionary of key,value pairs giving with the results.
-        Key = Column Heading, Value = Data
+        Generator to perform operations on data and images.
         """
 
         count = 0 
