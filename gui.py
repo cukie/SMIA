@@ -6,11 +6,13 @@
 
 import Tkinter as Tk
 import tkFileDialog
+import tkMessageBox
 import os
 from sets import Set
 import itertools
 import json
 import images
+import sys
 
 def isuseless(name_list):
     for name in name_list:
@@ -103,7 +105,7 @@ def firstthings():
     output_images = True if output_images_var.get() else False
     output_thumbnails = True if output_thumbnails_var.get() else False
     imaging_stack_loc = proloc_entry.get()
-    root.destroy()
+    first_options.destroy()
 
 def maskthings():
 
@@ -111,12 +113,14 @@ def maskthings():
     for prefix,name,threshold in mask_objects:
         prefix = prefix.get()
         name = name.get()
-        threshold = threshold.get()
+        thresh = threshold.get()
 
         # make it easier later on
-        dir_list.remove(prefix)
+        for item in dir_list:
+            if prefix in dir_list:
+                dir_list.remove(item)
 
-        mask_list.append((prefix,name,threshold))
+        mask_list.append((prefix,name,thresh))
 
     masks.destroy()
 
@@ -130,7 +134,9 @@ def markerthings():
         thresh = threshold.get()
 
         # this way we remove repition errors
-        dir_list.remove(prefix)
+        for item in dir_list:
+            if prefix in dir_list:
+                dir_list.remove(item)
 
         marker_list.append((prefix,name,thresh))
 
@@ -173,8 +179,9 @@ def setlocation():
     proloc_entry.delete(0,Tk.END)
     proloc_entry.insert(0, directory)
 
-def makeconfigfile(output_dir,dict):
-    jayson = json.dumps(dict, indent=4, sort_keys=True)
+def makeconfigfile(output_dir,output_dict):
+    print output_dict
+    jayson = json.dumps(output_dict, indent=4, sort_keys=True)
 
     config_loc = os.path.join(output_dir,"config_used.config")
 
@@ -185,10 +192,16 @@ def makeconfigfile(output_dir,dict):
 
 if __name__ == '__main__':
 
-    ################ First Window ############################
 
-    root = Tk.Tk()
-    root.wm_title("Initial Options")
+    ############### How do we want to run? ##########################
+
+
+
+
+    ################ First Options Window ############################
+
+    first_options = Tk.Tk()
+    first_options.wm_title("Initial Options")
 
 
     ### OUR EVENTUAL CONFIGURATION VARIABLES ###
@@ -204,34 +217,34 @@ if __name__ == '__main__':
 
     imaging_stack_loc = os.path.join(os.path.expanduser('~'),"imaging_stack")
 
-    program_loc_label = Tk.Label(root,anchor=Tk.CENTER,fg='red',text="MAKE SURE THIS PATH CORRESPONDS TO THE LOCATION OF YOUR 'imaging_stack' directory")
+    program_loc_label = Tk.Label(first_options,anchor=Tk.CENTER,fg='red',text="MAKE SURE THIS PATH CORRESPONDS TO THE LOCATION OF YOUR 'imaging_stack' directory")
     program_loc_label.grid(columnspan=2)
 
-    proloc_entry = Tk.Entry(root, width=80)
+    proloc_entry = Tk.Entry(first_options, width=80)
     proloc_entry.insert(0, imaging_stack_loc)
-    browse3 = Tk.Button(root, text="Browse", command = setlocation)
+    browse3 = Tk.Button(first_options, text="Browse", command = setlocation)
 
-    basedir_entry = Tk.Entry(root, width=80)
+    basedir_entry = Tk.Entry(first_options, width=80)
     basedir_entry.insert(0, "Base Directory")
-    browse1 = Tk.Button(root, text="Browse", command = setbase)
+    browse1 = Tk.Button(first_options, text="Browse", command = setbase)
 
-    outdir_entry = Tk.Entry(root, width=80)
+    outdir_entry = Tk.Entry(first_options, width=80)
     outdir_entry.insert(0, "Results Directory")
-    browse2 = Tk.Button(root, text="Browse", command = setresults)
+    browse2 = Tk.Button(first_options, text="Browse", command = setresults)
 
-    nummasks_entry = Tk.Entry(root)
+    nummasks_entry = Tk.Entry(first_options)
     nummasks_entry.insert(0, "How many masks?")
 
-    nummarkers_entry = Tk.Entry(root)
+    nummarkers_entry = Tk.Entry(first_options)
     nummarkers_entry.insert(0, "How many markers?")
 
     output_images_var = Tk.IntVar()
-    output_images_button = Tk.Checkbutton(root, text="Output Full-Sized Images", variable=output_images_var)
+    output_images_button = Tk.Checkbutton(first_options, text="Output Full-Sized Images", variable=output_images_var)
 
     output_thumbnails_var = Tk.IntVar()
-    output_thumbnails_button = Tk.Checkbutton(root, text="Output Full-Sized Images", variable=output_thumbnails_var)
+    output_thumbnails_button = Tk.Checkbutton(first_options, text="Output Full-Sized Images", variable=output_thumbnails_var)
 
-    pressme = Tk.Button(root, text="Continue", command = firstthings)
+    pressme = Tk.Button(first_options, text="Continue", command = firstthings)
     proloc_entry.grid(row=1,column=0)
     browse3.grid(row=1,column=1)
     basedir_entry.grid(row=2,column=0)
@@ -243,10 +256,10 @@ if __name__ == '__main__':
     output_images_button.grid()
     output_thumbnails_button.grid()
     pressme.grid()
-    root.mainloop()
+    first_options.mainloop()
 
 
-    ################### Second Window ###############################
+    ################### Mask Options Window ###############################
     masks = Tk.Tk()
     masks.wm_title("Mask Options")
     mask_objects = []
@@ -263,17 +276,21 @@ if __name__ == '__main__':
         prefix_var = Tk.StringVar(masks)
         prefix_var.set("Choose Mask Prefix") # initial value
         prefix = apply(Tk.OptionMenu, (masks,prefix_var) + tuple(dir_list))
-       
+        
+        common_sub = Tk.Entry(masks)
+        common_sub.insert(0,"common subsequence")
+
         name = Tk.Entry(masks)
         name.insert(0, "mask name")
 
         threshold = Tk.Scale(masks, from_=0, to=255, orient=Tk.HORIZONTAL, label="threshold", length=255)
 
         prefix.grid(row=i, column=0)
-        name.grid(row=i, column=1)
-        threshold.grid(row=i, column=2)
+        common_sub.grid(row=i,column=1)
+        name.grid(row=i, column=2)
+        threshold.grid(row=i, column=3)
 
-        mask_objects.append((prefix_var,name,threshold))
+        mask_objects.append((common_sub,name,threshold))
 
     pressme = Tk.Button(masks, text="Continue", command = maskthings)
     pressme.grid()
@@ -282,12 +299,12 @@ if __name__ == '__main__':
 
 
 
-    ################ Third Window ###############################################
+    ################ Marker Options Window ###############################################
 
     markers = Tk.Tk()
     markers.wm_title("Marker Options")
     marker_objects = []
-    dir_list = GetPicList(basedir)
+    # dir_list = GetPicList(basedir)
 
     marker_label = Tk.Label(markers, text="Marker Options")
     marker_label.grid()
@@ -301,6 +318,9 @@ if __name__ == '__main__':
         prefix_var.set("Choose Marker Prefix") # initial value
         prefix = apply(Tk.OptionMenu, (markers,prefix_var) + tuple(dir_list))
        
+        common_sub = Tk.Entry(markers)
+        common_sub.insert(0,"common subsequence")
+
         name = Tk.Entry(markers)
         name.insert(0, "Marker name")
         
@@ -310,10 +330,11 @@ if __name__ == '__main__':
         threshold = Tk.Scale(markers, from_=0, to=255, orient=Tk.HORIZONTAL, label="threshold", length=255)
 
         prefix.grid(row=i, column=0)
-        name.grid(row=i, column=1)
-        threshold.grid(row=i, column=2)
+        common_sub.grid(row=i, column=1)
+        name.grid(row=i, column=2)
+        threshold.grid(row=i, column=3)
 
-        marker_objects.append((prefix_var,name,threshold))
+        marker_objects.append((common_sub,name,threshold))
 
     pressme = Tk.Button(markers, text="Continue", command = markerthings)
     pressme.grid()
@@ -350,7 +371,14 @@ if __name__ == '__main__':
     # write it to a file in json format
     config_path = makeconfigfile(output_dir, config_dict)
 
-    images.main(config_path)
+    try:
+        images.main(config_path)
+        Tk.Tk().withdraw() # get rid of top level window
+        tkMessageBox.showinfo("Success!,","Success!!!\n See your results in: \n" + output_dir)
+    except:
+        Tk.Tk().withdraw() # get rid of top level window
+        tkMessageBox.showerror("ERROR!", "An error occurred! \nSee terminal output")
+        print sys.exc_info()
 
 
 

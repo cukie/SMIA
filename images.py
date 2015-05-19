@@ -84,14 +84,14 @@ def LoopDirectory():
 	"""
 
 	# open our results file
-	f = open(output_path+"/results.csv",'wb')
+	f = open(os.path.join(output_path,"results.csv"),'wb')
 	writer = None
 	# open the file... and perform the given operations for each entry
 	count = 0
 	for directory in listdir_fullpath(base_dir):
 		time1 = time.time()
 		count += 1
-		print "processing directory: " + directory.split(base_dir)[1]
+		print "processing directory: " + os.path.basename(directory)
 		masks = []
 		markers = []
 		save_location = ''
@@ -211,12 +211,12 @@ def main(config_file):
 	# Set our configuration variables
 	ConfigDictToGlobals(config_dict)
 
-	# Here's where the magic happens
+	# # Here's where the magic happens
 	LoopDirectory()
-	with open(output_path+"/used_config.txt",'w') as c:
-		json.dump(config_dict,c,indent=4, sort_keys=True)
-	# print some success messages
-	# ToDo: bundle this up into its own method
+	# with open(output_path+"/used_config.txt",'w') as c:
+	# 	json.dump(config_dict,c,indent=4, sort_keys=True)
+	# # print some success messages
+	# # ToDo: bundle this up into its own method
 	print
 	print "You have succesfully procesed:\n" + base_dir
 	print
