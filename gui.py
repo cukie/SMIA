@@ -89,11 +89,15 @@ def GetPicList(basedir):
 
     pic_list = os.listdir(os.path.join(basedir,(os.listdir(basedir)[2])))
 
+    for pic in pic_list:
+        pic = pic.replace('.tif','')
     return pic_list
 
 def firstthings():
     global basedir,nummasks,nummarkers, output_images, output_thumbnails, output_dir, imaging_stack_loc
+    imaging_stack_loc = proloc_entry.get()
     basedir = basedir_entry.get()
+    output_dir = outdir_entry.get()
     nummasks = int(nummasks_entry.get())
     nummarkers = int(nummarkers_entry.get())
     output_images = True if output_images_var.get() else False
@@ -148,7 +152,7 @@ def setbase():
     basedir_entry.insert(0, directory)
 
 def setresults():
-    global output_dir
+    global outdir_entry
 
     directory = tkFileDialog.askdirectory()
 
@@ -156,19 +160,19 @@ def setresults():
     outdir_entry.insert(0, directory)
 
 def setlocation():
-    global imaging_stack_loc
+    global proloc_entry
 
     directory = tkFileDialog.askdirectory()
 
-    basedir_entry.delete(0,Tk.END)
-    basedir_entry.insert(0, directory)
+    proloc_entry.delete(0,Tk.END)
+    proloc_entry.insert(0, directory)
 
-def makeconfigfile(dict):
+def makeconfigfile(output_dir,dict):
     jayson = json.dumps(dict, indent=4, sort_keys=True)
 
     config_loc = os.path.join(output_dir,"config_used.config")
 
-    with open(result_file, 'w+') as config_file:
+    with open(config_loc, 'w+') as config_file:
         config_file.write(jayson)
 
     return config_loc
@@ -338,7 +342,7 @@ if __name__ == '__main__':
     config_dict = createdict()
 
     # write it to a file in json format
-    config_path = makeconfigfile(config_dict)
+    config_path = makeconfigfile(output_dir, config_dict)
 
     images.main(config_path)
 
