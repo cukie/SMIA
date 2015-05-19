@@ -107,11 +107,14 @@ def firstthings():
 
 def maskthings():
 
-    global mask_list
+    global mask_list, dir_list
     for prefix,name,threshold in mask_objects:
         prefix = prefix.get()
         name = name.get()
         threshold = threshold.get()
+
+        # make it easier later on
+        dir_list.remove(prefix)
 
         mask_list.append((prefix,name,threshold))
 
@@ -119,12 +122,15 @@ def maskthings():
 
 def markerthings():
 
-    global marker_list
+    global marker_list, dir_list
 
     for prefix,name,threshold in marker_objects:
         prefix = prefix.get()
         name = name.get()
         thresh = threshold.get()
+
+        # this way we remove repition errors
+        dir_list.remove(prefix)
 
         marker_list.append((prefix,name,thresh))
 
