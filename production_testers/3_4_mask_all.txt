@@ -41,7 +41,7 @@
             55
         ]
     ], 
-    "output_images": true, 
+    "output_images": false, 
     "output_thumbnails": false, 
     "num_markers": 3, 
     "num_masks": 4, 

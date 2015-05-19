@@ -215,8 +215,8 @@ def main(config_file):
 	LoopDirectory()
 	# with open(output_path+"/used_config.txt",'w') as c:
 	# 	json.dump(config_dict,c,indent=4, sort_keys=True)
-	# # print some success messages
-	# # ToDo: bundle this up into its own method
+	# print some success messages
+	# ToDo: bundle this up into its own method
 	print
 	print "You have succesfully procesed:\n" + base_dir
 	print
