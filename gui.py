@@ -19,13 +19,12 @@ def runanalysis(config_path):
     try:
         images.main(config_path)
         Tk.Tk().withdraw() # get rid of top level window
-        tkMessageBox.showinfo("Success!,","Success!!!\n See your results in: \n" + output_dir)
+        tkMessageBox.showinfo("Success!,","Success!!!\n")
     except:
         Tk.Tk().withdraw() # get rid of top level window
         tkMessageBox.showerror("ERROR!", "An error occurred! \nSee terminal output")
         print sys.exc_info()
         sys.exit(1)
-
 
 def isuseless(name_list):
     for name in name_list:
@@ -226,7 +225,7 @@ def runfromconfig():
     with open(config_file,'rb') as f:
         to_change = json.load(f)
 
-    to_change['output_dir'] = new_result_loc
+    to_change['output_to'] = new_result_loc
 
     jayson = json.dumps(to_change, indent=4, sort_keys=True)
 
@@ -239,6 +238,8 @@ def runfromconfig():
 
     # now pass the new file into images.py main function
     runanalysis(newloc)
+
+    sys.exit(0)
 
 def makenew():
     # if we get to here let's destroy the window and just move on
