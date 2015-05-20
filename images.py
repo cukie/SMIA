@@ -72,7 +72,7 @@ def MaskorMarker(pic_path):
 			prefix,name,treshold = marker_info
 			return ("marker",prefix,name,treshold)
 
-	raise ValueError("given marker or mask prefix not found while traversing directory")
+	raise ValueError("given marker or mask prefix not found while traversing directory for image: " + pic_path)
 
 def LoopDirectory():
 	"""
