@@ -14,6 +14,19 @@ import json
 import images
 import sys
 
+
+def runanalysis(config_path):
+    try:
+        images.main(config_path)
+        Tk.Tk().withdraw() # get rid of top level window
+        tkMessageBox.showinfo("Success!,","Success!!!\n See your results in: \n" + output_dir)
+    except:
+        Tk.Tk().withdraw() # get rid of top level window
+        tkMessageBox.showerror("ERROR!", "An error occurred! \nSee terminal output")
+        print sys.exc_info()
+        sys.exit(1)
+
+
 def isuseless(name_list):
     for name in name_list:
         if "NOT" + name in name_list:
@@ -96,15 +109,13 @@ def GetPicList(basedir):
     return pic_list
 
 def firstthings():
-    global basedir,nummasks,nummarkers, output_images, output_thumbnails, output_dir, imaging_stack_loc
-    imaging_stack_loc = proloc_entry.get()
+    global basedir,nummasks,nummarkers, output_images, output_thumbnails, output_dir
     basedir = basedir_entry.get()
     output_dir = outdir_entry.get()
     nummasks = int(nummasks_entry.get())
     nummarkers = int(nummarkers_entry.get())
     output_images = True if output_images_var.get() else False
     output_thumbnails = True if output_thumbnails_var.get() else False
-    imaging_stack_loc = proloc_entry.get()
     first_options.destroy()
 
 def maskthings():
@@ -190,14 +201,78 @@ def makeconfigfile(output_dir,output_dict):
 
     return config_loc
 
+def setconfig():
+    directory = tkFileDialog.askopenfilename()
+
+    config_loc_entry.delete(0,Tk.END)
+    config_loc_entry.insert(0, directory)
+
+def setnewres():
+    directory = tkFileDialog.askdirectory()
+
+    result_loc.delete(0,Tk.END)
+    result_loc.insert(0, directory)
+
+def runfromconfig():
+    global from_config
+    # grab the new configuration file
+    config_file = config_loc_entry.get()
+    # update the results file
+    new_result_loc = result_loc.get()
+
+    # open the config file, load the json dict
+    # change the dict and write the file back.
+    to_change = {}
+    with open(config_file,'rb') as f:
+        to_change = json.load(f)
+
+    to_change['output_dir'] = new_result_loc
+
+    jayson = json.dumps(to_change, indent=4, sort_keys=True)
+
+    newloc = os.path.join(new_result_loc,'used_config.config')
+
+    with open(newloc, 'wb') as f:
+        f.write(jayson)
+
+    from_config.destroy()
+
+    # now pass the new file into images.py main function
+    runanalysis(newloc)
+
+def makenew():
+    # if we get to here let's destroy the window and just move on
+    from_config.destroy()
+
 if __name__ == '__main__':
 
 
-    ############### How do we want to run? ##########################
+    ############### From Config ##########################
+    from_config = Tk.Tk()
+
+    # browse for configuration file
+    config_loc_entry = Tk.Entry(from_config, width=80)
+    config_loc_entry.insert(0, "Configuration File Location")
+    browse = Tk.Button(from_config, text="Browse", command = setconfig)
+
+    # browse for new results location
+    result_loc = Tk.Entry(from_config, width=80)
+    result_loc.insert(0, "New Result Location")
+    browseres = Tk.Button(from_config, text="Browse", command = setnewres)
 
 
+    run = Tk.Button(from_config, text="Run Analysis", command=runfromconfig)
+    dontrun = Tk.Button(from_config, text="Make New", command=makenew)
+
+    config_loc_entry.grid(row=0,column=0)
+    browse.grid(row=0,column=1)
+    result_loc.grid(row=1,column=0)
+    browseres.grid(row=1,column=1)
+    run.grid(row=2,column=1)
+    dontrun.grid(row=2,column=0)
 
 
+    from_config.mainloop()
     ################ First Options Window ############################
 
     first_options = Tk.Tk()
@@ -215,14 +290,14 @@ if __name__ == '__main__':
     output_images = False
     output_thumbnails = False 
 
-    imaging_stack_loc = os.path.join(os.path.expanduser('~'),"imaging_stack")
+    # imaging_stack_loc = os.path.join(os.path.expanduser('~'),"imaging_stack")
 
-    program_loc_label = Tk.Label(first_options,anchor=Tk.CENTER,fg='red',text="MAKE SURE THIS PATH CORRESPONDS TO THE LOCATION OF YOUR 'imaging_stack' directory")
-    program_loc_label.grid(columnspan=2)
+    # program_loc_label = Tk.Label(first_options,anchor=Tk.CENTER,fg='red',text="MAKE SURE THIS PATH CORRESPONDS TO THE LOCATION OF YOUR 'imaging_stack' directory")
+    # program_loc_label.grid(columnspan=2)
 
-    proloc_entry = Tk.Entry(first_options, width=80)
-    proloc_entry.insert(0, imaging_stack_loc)
-    browse3 = Tk.Button(first_options, text="Browse", command = setlocation)
+    # proloc_entry = Tk.Entry(first_options, width=80)
+    # proloc_entry.insert(0, imaging_stack_loc)
+    # browse3 = Tk.Button(first_options, text="Browse", command = setlocation)
 
     basedir_entry = Tk.Entry(first_options, width=80)
     basedir_entry.insert(0, "Base Directory")
@@ -245,8 +320,8 @@ if __name__ == '__main__':
     output_thumbnails_button = Tk.Checkbutton(first_options, text="Output Thumbnail Images", variable=output_thumbnails_var)
 
     pressme = Tk.Button(first_options, text="Continue", command = firstthings)
-    proloc_entry.grid(row=1,column=0)
-    browse3.grid(row=1,column=1)
+    # proloc_entry.grid(row=1,column=0)
+    # browse3.grid(row=1,column=1)
     basedir_entry.grid(row=2,column=0)
     browse1.grid(row=2,column=1)
     outdir_entry.grid(row=3,column=0)
@@ -371,14 +446,17 @@ if __name__ == '__main__':
     # write it to a file in json format
     config_path = makeconfigfile(output_dir, config_dict)
 
-    try:
-        images.main(config_path)
-        Tk.Tk().withdraw() # get rid of top level window
-        tkMessageBox.showinfo("Success!,","Success!!!\n See your results in: \n" + output_dir)
-    except:
-        Tk.Tk().withdraw() # get rid of top level window
-        tkMessageBox.showerror("ERROR!", "An error occurred! \nSee terminal output")
-        print sys.exc_info()
+
+    runanalysis(config_path)
+
+    # try:
+    #     images.main(config_path)
+    #     Tk.Tk().withdraw() # get rid of top level window
+    #     tkMessageBox.showinfo("Success!,","Success!!!\n See your results in: \n" + output_dir)
+    # except:
+    #     Tk.Tk().withdraw() # get rid of top level window
+    #     tkMessageBox.showerror("ERROR!", "An error occurred! \nSee terminal output")
+    #     print sys.exc_info()
 
 
 
