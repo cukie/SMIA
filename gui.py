@@ -242,7 +242,7 @@ if __name__ == '__main__':
     output_images_button = Tk.Checkbutton(first_options, text="Output Full-Sized Images", variable=output_images_var)
 
     output_thumbnails_var = Tk.IntVar()
-    output_thumbnails_button = Tk.Checkbutton(first_options, text="Output Full-Sized Images", variable=output_thumbnails_var)
+    output_thumbnails_button = Tk.Checkbutton(first_options, text="Output Thumbnail Images", variable=output_thumbnails_var)
 
     pressme = Tk.Button(first_options, text="Continue", command = firstthings)
     proloc_entry.grid(row=1,column=0)
