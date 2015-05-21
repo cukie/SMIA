@@ -15,9 +15,9 @@ It was originally developed for use in:
 
 
 **Installation:**
-**=============**
 
 To install this application, the following items must be installed:
+
 python 2.7
 	Download Link:
 	https://www.python.org/downloads/windows/
@@ -30,7 +30,7 @@ Microsoft Visual Basic C++ for Python (Windows Only)
 
 Once the above to items have been installed, open a terminal(mac) or command prompt(windows) and run the following:
 >	$ pip install Pillow
->	$ pip install numpy (must have C++ compiler on Windows above)
+	$ pip install numpy (must have C++ compiler on Windows above)
 
 
 
@@ -38,7 +38,7 @@ You can then download the source code from this site.
 
 
 **RUNNING FROM THE GRAPHICAL INTERFACE:**
-**=====================================**
+
 To run SMIA-CUKIE using the graphical interface, just double click on SMIA-CUKIE.py
 
 To run MakeBatches utility using the graphical interface, just double click on MakeBatches.py
@@ -46,15 +46,14 @@ To run MakeBatches utility using the graphical interface, just double click on M
 
 
 ##RUNNING FROM THE COMMAND LINE:
-##==============================
 The application functionality can also be accessed via the command line. In order to do this,
 please follow the instructions below carefully. This functionality requires you to create a 
 configuration file in a text editor and can be a little more technical. 
 
-Use of the graphical interface is recommended.
+*Use of the graphical interface is recommended.*
 
 **Image Format and Directory Structure:**
-**====================================**
+
 The "base directory" will be a folder that holds all other folders. A typical file structure for analyzation MUST be of this form:
 
 	Base_Directory
@@ -84,11 +83,10 @@ The "base directory" will be a folder that holds all other folders. A typical fi
 
 
 **Configuration:**
-**==============**
 
 For every run of the application, you must first create a configuration file. A default ConfigMe file can be created by running the following in terminal or command prompt:
 	
-	$ python make_config.py
+> 	$ python make_config.py
 
 A default configuration file skin named ConfigMe will be created.
 
@@ -101,7 +99,7 @@ DO NOT CHANGE THE KEYS - ONLY THE VALUES. DO NOT LEAVE ANY DEFAULT VALUE INFORMA
 Replace each descriptor value with the information it asks for. For clarification purposes, all the configuration options are described below:
 	
 	base_directory: 
-		A string representing the absolute path of the top level directory containing all the batches of images. NOTE in Windows you will need to use double backslashes.
+		A string representing the absolute path of the top level directory containing all the batches of images. NOTE 			in Windows you will need to use double backslashes.
 		E.g. Windows - "C:\\path\\to\\dir\\here"
 			 Mac - "/path/to/dir/here"
 
@@ -111,9 +109,9 @@ Replace each descriptor value with the information it asks for. For clarificatio
 
 			file prefix - a unique identifier for the name of this specific image frame. 
 
-			desired name - the name you would like to use to identify the file. This is the name that will represent the marker in your results. 
+			desired name - the name you would like to use to identify the file. This is the name that will 					represent the marker in your results. 
 
-			threshold - a threshold value for your marker where a valid pixel is defined as having a value greater than or equal to the threshold. 
+			threshold - a threshold value for your marker where a valid pixel is defined as having a value greater 			than or equal to the threshold. 
 
 	mask_names:
 		A list of mask names defined the same way as marker names
@@ -128,16 +126,15 @@ Replace each descriptor value with the information it asks for. For clarificatio
 		integer value of total number of images per batch
 
 	overlay_white_list:
-		a list of strings corresponding to the operations you would like the application to perform. They must all be of the form "singlemarker under however, many, masks"
+		a list of strings corresponding to the operations you would like the application to perform. They must all be 			of the form "singlemarker under however, many, masks"
 
-		In order to denote the inverse of a mask or marker, simply prepend the word "NOT" to the front of the name. E.g. if we have a marker called nuclei, then its inverse would be NOTnuclei. 
+		In order to denote the inverse of a mask or marker, simply prepend the word "NOT" to the front of the name. 			E.g. if we have a marker called nuclei, then its inverse would be NOTnuclei. 
 
 	output_to:
-		A string representing the absolute path of where you wish to output all results (excel file, copy of configuration file used, thumbnails, etc.)
+		A string representing the absolute path of where you wish to output all results (excel file, copy of 				configuration file used, thumbnails, etc.)
 
 
 **RUNNING INSTRUCTIONS:**
-**=====================**
 
 Before you run the program please make sure that all fields in the configuration file have been filled out appropriately. 
 
@@ -148,9 +145,8 @@ To run the program, open a terminal(mac) or command prompt(windows), and type th
 If the program runs successfully (can take several minutes if there are many images and/or operation to analyze) you will see a message telling you that 'you have successfully proccessed:' your images, and where you can find your results. 
 
 **QUESTIONS/COMMENTS:**
-**===================**
 
-For general inquiries please contact Dr. Edna Cukierman
+For general inquiries please contact **Dr. Edna Cukierman**
 
-If you wish to raise an issue with the program or extend it, please open a new issue on github.
+*If you wish to raise an issue with the program or extend it, please open a new issue on github.*
 
