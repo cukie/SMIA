@@ -13,6 +13,7 @@ It was originally developed for use in:
 
 **PLEASE FOLLOW THE INSTALLATION AND CONFIGURATION INSTRUCTIONS CAREFULLY, AS THEY CAN SEEM A BIT COMPLICATED AT FIRST.**
 
+*If you wish to raise an issue with the program or extend it, please open a new issue on github or fork and open a pull request.*
 
 **Installation:**
 
