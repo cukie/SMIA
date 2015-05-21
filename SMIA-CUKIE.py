@@ -13,6 +13,7 @@ import itertools
 import json
 import images
 import sys
+import tkFont
 
 
 def runanalysis(config_path):
@@ -248,16 +249,22 @@ def makenew():
 if __name__ == '__main__':
 
 
+
     ############### From Config ##########################
     from_config = Tk.Tk()
+    from_config.wm_title("SMIA-CUKIE")
 
+    customFont = tkFont.Font(root=from_config,family="Helvetica", size=80)
+
+
+    title_label = Tk.Label(text="SMIA-CUKIE", font = customFont)
     # browse for configuration file
-    config_loc_entry = Tk.Entry(from_config, width=80)
+    config_loc_entry = Tk.Entry(from_config, width=50)
     config_loc_entry.insert(0, "Configuration File Location")
     browse = Tk.Button(from_config, text="Browse", command = setconfig)
 
     # browse for new results location
-    result_loc = Tk.Entry(from_config, width=80)
+    result_loc = Tk.Entry(from_config, width=50)
     result_loc.insert(0, "New Result Location")
     browseres = Tk.Button(from_config, text="Browse", command = setnewres)
 
@@ -265,12 +272,13 @@ if __name__ == '__main__':
     run = Tk.Button(from_config, text="Run Analysis", command=runfromconfig)
     dontrun = Tk.Button(from_config, text="Make New", command=makenew)
 
-    config_loc_entry.grid(row=0,column=0)
-    browse.grid(row=0,column=1)
-    result_loc.grid(row=1,column=0)
-    browseres.grid(row=1,column=1)
-    run.grid(row=2,column=1)
-    dontrun.grid(row=2,column=0)
+    title_label.grid(columnspan=2)
+    config_loc_entry.grid(row=1,column=0)
+    browse.grid(row=1,column=1)
+    result_loc.grid(row=2,column=0)
+    browseres.grid(row=2,column=1)
+    run.grid()
+    dontrun.grid()
 
 
     from_config.mainloop()
