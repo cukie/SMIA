@@ -30,11 +30,11 @@ Microsoft Visual Basic C++ for Python (Windows Only)
 
 Once the above to items have been installed, open a terminal(mac) or command prompt(windows) and run the following:
 >	$ pip install Pillow
-	$ pip install numpy (must have C++ compiler on Windows above)
+>	$ pip install numpy (must have C++ compiler on Windows above)
 
 
 
-You can then download the source code from this site.
+You can then download the source code from this github site (find the 'download zip' button on the side).
 
 
 **RUNNING FROM THE GRAPHICAL INTERFACE:**
