@@ -3,7 +3,7 @@
 ## Simultaneous Multichannel Immunofluorescense Digital Imaging Analyzer
 ## By Gil Cukierman
 
-This application was created to bulk process and analyze batches of monochromatic images providing localization(masks), intensities, and similar quantifying values(markers), including collocalizations of multichannel monochromatic imunofluorescent images.
+This application was created to bulk process and analyze batches of monochromatic images providing localization(masks), intensities, and similar quantifying values(markers), including collocalizations of multichannel monochromatic imunofluorescent (or IHC, etc.) images.
 
 It can output both image and value(excel) outputs. 
 
