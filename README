@@ -1,6 +1,7 @@
-SMI-Analyzer
+SMIA-CUKIE
 
 Simultaneous Multichannel Immunofluorescense Digital Imaging Analyzer
+By Gil Cukierman
 
 This application was created to bulk process and analyze batches of monochromatic images providing localization(masks), intensities, and similar quantifying values(markers), including collocalizations of multichannel monochromatic imunofluorescent images.
 
@@ -11,6 +12,46 @@ It was originally developed for use in:
 
 
 PLEASE FOLLOW THE INSTALLATION AND CONFIGURATION INSTRUCTIONS CAREFULLY, AS THEY CAN SEEM A BIT COMPLICATED AT FIRST. 
+
+
+Installation:
+=============
+
+To install this application, the following items must be installed:
+python 2.7
+	Download Link:
+	https://www.python.org/downloads/windows/
+
+	A good reference to get things working:
+	https://docs.python.org/2/faq/windows.html
+
+Microsoft Visual Basic C++ for Python (Windows Only)
+	https://www.microsoft.com/en-us/download/details.aspx?id=44266
+
+Once the above to items have been installed, open a terminal(mac) or command prompt(windows) and run the following:
+	$ pip install Pillow
+	$ pip install numpy (must have C++ compiler on Windows above)
+
+
+
+You can then download the source code from this site.
+
+
+RUNNING FROM THE GRAPHICAL INTERFACE:
+=====================================
+To run SMIA-CUKIE using the graphical interface, just double click on SMIA-CUKIE.py
+
+To run MakeBatches utility using the graphical interface, just double click on MakeBatches.py
+
+
+
+RUNNING FROM THE COMMAND LINE:
+==============================
+The application functionality can also be accessed via the command line. In order to do this,
+please follow the instructions below carefully. This functionality requires you to create a 
+configuration file in a text editor and can be a little more technical. 
+
+Use of the graphical interface is recommended.
 
 Image Format and Directory Structure:
 ====================================
@@ -41,27 +82,6 @@ The "base directory" will be a folder that holds all other folders. A typical fi
                         -> Image5
                         ... name your images whatever you want but stay consistent between batches. 
 
-Installation:
-=============
-
-To install this application, the following items must be installed:
-python 2.7
-	Download Link:
-	https://www.python.org/downloads/windows/
-
-	A good reference to get things working:
-	https://docs.python.org/2/faq/windows.html
-git
-	https://www.git-scm.com/download/win
-
-Microsoft Visual Basic C++ for Python (Windows Only)
-	https://www.microsoft.com/en-us/download/details.aspx?id=44266
-
-To get the source code for SMI-Analyzer, open a terminal(mac) or command prompt(windows) and run the following commands:
-
-	$ git clone "url of my repository"
-	$ pip install Pillow
-	$ pip install numpy (must have C++ compiler on Windows above)
 
 Configuration:
 ==============
