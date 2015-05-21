@@ -34,7 +34,10 @@ Once the above to items have been installed, open a terminal(mac) or command pro
 
 
 
-You can then download the source code from this github site (find the 'download zip' button on the side).
+You can then download the source code in two ways:
+* from this github site (find the 'download zip' button on the side)
+* using git clone (https and ssh options both given on the side bar)
+
 
 
 **RUNNING FROM THE GRAPHICAL INTERFACE:**
