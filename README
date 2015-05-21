@@ -1,7 +1,7 @@
-SMIA-CUKIE
+#SMIA-CUKIE
 
-Simultaneous Multichannel Immunofluorescense Digital Imaging Analyzer
-By Gil Cukierman
+##Simultaneous Multichannel Immunofluorescense Digital Imaging Analyzer
+##By Gil Cukierman
 
 This application was created to bulk process and analyze batches of monochromatic images providing localization(masks), intensities, and similar quantifying values(markers), including collocalizations of multichannel monochromatic imunofluorescent images.
 
@@ -11,11 +11,11 @@ It was originally developed for use in:
 	J. Franco-Barraza et.al 2015 at the Cukierman Lab Fox Chase Cancer Center
 
 
-PLEASE FOLLOW THE INSTALLATION AND CONFIGURATION INSTRUCTIONS CAREFULLY, AS THEY CAN SEEM A BIT COMPLICATED AT FIRST. 
+**PLEASE FOLLOW THE INSTALLATION AND CONFIGURATION INSTRUCTIONS CAREFULLY, AS THEY CAN SEEM A BIT COMPLICATED AT FIRST.**
 
 
-Installation:
-=============
+**Installation:**
+**=============**
 
 To install this application, the following items must be installed:
 python 2.7
@@ -29,32 +29,32 @@ Microsoft Visual Basic C++ for Python (Windows Only)
 	https://www.microsoft.com/en-us/download/details.aspx?id=44266
 
 Once the above to items have been installed, open a terminal(mac) or command prompt(windows) and run the following:
-	$ pip install Pillow
-	$ pip install numpy (must have C++ compiler on Windows above)
+>	$ pip install Pillow
+>	$ pip install numpy (must have C++ compiler on Windows above)
 
 
 
 You can then download the source code from this site.
 
 
-RUNNING FROM THE GRAPHICAL INTERFACE:
-=====================================
+**RUNNING FROM THE GRAPHICAL INTERFACE:**
+**=====================================**
 To run SMIA-CUKIE using the graphical interface, just double click on SMIA-CUKIE.py
 
 To run MakeBatches utility using the graphical interface, just double click on MakeBatches.py
 
 
 
-RUNNING FROM THE COMMAND LINE:
-==============================
+##RUNNING FROM THE COMMAND LINE:
+##==============================
 The application functionality can also be accessed via the command line. In order to do this,
 please follow the instructions below carefully. This functionality requires you to create a 
 configuration file in a text editor and can be a little more technical. 
 
 Use of the graphical interface is recommended.
 
-Image Format and Directory Structure:
-====================================
+**Image Format and Directory Structure:**
+**====================================**
 The "base directory" will be a folder that holds all other folders. A typical file structure for analyzation MUST be of this form:
 
 	Base_Directory
@@ -83,8 +83,8 @@ The "base directory" will be a folder that holds all other folders. A typical fi
                         ... name your images whatever you want but stay consistent between batches. 
 
 
-Configuration:
-==============
+**Configuration:**
+**==============**
 
 For every run of the application, you must first create a configuration file. A default ConfigMe file can be created by running the following in terminal or command prompt:
 	
@@ -136,19 +136,19 @@ Replace each descriptor value with the information it asks for. For clarificatio
 		A string representing the absolute path of where you wish to output all results (excel file, copy of configuration file used, thumbnails, etc.)
 
 
-RUNNING INSTRUCTIONS:
-=====================
+**RUNNING INSTRUCTIONS:**
+**=====================**
 
 Before you run the program please make sure that all fields in the configuration file have been filled out appropriately. 
 
 To run the program, open a terminal(mac) or command prompt(windows), and type the following command:
 	
-	$ python images.py [/path/to/config/file/omit/brackets]
+>	$ python images.py [/path/to/config/file/omit/brackets]
 
 If the program runs successfully (can take several minutes if there are many images and/or operation to analyze) you will see a message telling you that 'you have successfully proccessed:' your images, and where you can find your results. 
 
-QUESTIONS/COMMENTS:
-===================
+**QUESTIONS/COMMENTS:**
+**===================**
 
 For general inquiries please contact Dr. Edna Cukierman
 
