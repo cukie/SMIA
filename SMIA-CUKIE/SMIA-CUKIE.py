@@ -257,8 +257,12 @@ if __name__ == '__main__':
     customFont = tkFont.Font(root=from_config,family="Helvetica", size=80)
 
 
-    title_label = Tk.Label(text="SMIA-CUKIE", font = customFont)
-    # browse for configuration file
+    title_label = Tk.Label(from_config,text="SMIA-CUKIE", font = customFont, fg='blue')
+
+    title_explain = Tk.Label(from_config,text="Simultaneous Multi-Channel Immunofluorescence Analysis\n By Gil Cukierman",fg='blue')
+
+    instructions_label = Tk.Label(justify=Tk.LEFT,anchor=Tk.W, text = "\n\nIf you already have a configuration file, proceed below and press 'Run Analysis'\nOtherwise, press 'Make New' to create a configuration file\n\n")
+
     config_loc_entry = Tk.Entry(from_config, width=50)
     config_loc_entry.insert(0, "Configuration File Location")
     browse = Tk.Button(from_config, text="Browse", command = setconfig)
@@ -273,10 +277,13 @@ if __name__ == '__main__':
     dontrun = Tk.Button(from_config, text="Make New", command=makenew)
 
     title_label.grid(columnspan=2)
-    config_loc_entry.grid(row=1,column=0)
-    browse.grid(row=1,column=1)
-    result_loc.grid(row=2,column=0)
-    browseres.grid(row=2,column=1)
+    title_explain.grid(columnspan=2)
+    instructions_label.grid()
+
+    config_loc_entry.grid(row=4,column=0)
+    browse.grid(row=4,column=1)
+    result_loc.grid(row=5,column=0)
+    browseres.grid(row=5,column=1)
     run.grid()
     dontrun.grid()
 
@@ -308,6 +315,15 @@ if __name__ == '__main__':
     # proloc_entry.insert(0, imaging_stack_loc)
     # browse3 = Tk.Button(first_options, text="Browse", command = setlocation)
 
+    customFont = tkFont.Font(root=first_options,family="Helvetica", size=80)
+
+
+    title_label = Tk.Label(first_options,text="SMIA-CUKIE", font = customFont, fg='blue')
+
+    title_explain = Tk.Label(first_options,text="Simultaneous Multi-Channel Immunofluorescence Analysis\n By Gil Cukierman",fg='blue')
+
+    instructions_label = Tk.Label(first_options,justify=Tk.LEFT,anchor=Tk.W, text = "\n\nFill in the options below.\nUse Caution with outputing images and thumbnails(No more than 10 batches)!!\n")
+
     basedir_entry = Tk.Entry(first_options, width=80)
     basedir_entry.insert(0, "Base Directory")
     browse1 = Tk.Button(first_options, text="Browse", command = setbase)
@@ -331,10 +347,13 @@ if __name__ == '__main__':
     pressme = Tk.Button(first_options, text="Continue", command = firstthings)
     # proloc_entry.grid(row=1,column=0)
     # browse3.grid(row=1,column=1)
-    basedir_entry.grid(row=2,column=0)
-    browse1.grid(row=2,column=1)
-    outdir_entry.grid(row=3,column=0)
-    browse2.grid(row=3,column=1)
+    title_label.grid(columnspan=2)
+    title_explain.grid(columnspan=2)
+    instructions_label.grid()
+    basedir_entry.grid(row=4,column=0)
+    browse1.grid(row=4,column=1)
+    outdir_entry.grid(row=5,column=0)
+    browse2.grid(row=5,column=1)
     nummasks_entry.grid()
     nummarkers_entry.grid()
     output_images_button.grid()
