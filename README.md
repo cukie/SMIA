@@ -44,10 +44,10 @@ To run SMIA-CUKIE using the graphical interface, just double click on SMIA-CUKIE
 To run MakeBatches utility using the graphical interface, just double click on MakeBatches.py
 
 *If you don't plan on running this application from the command line, you may stop here*
-_
-_
-_
-_
+<br>
+<br>
+<br>
+<br>
  
 
 
