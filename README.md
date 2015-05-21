@@ -162,5 +162,5 @@ If the program runs successfully (can take several minutes if there are many ima
 
 For general inquiries please contact **Dr. Edna Cukierman**
 
-*If you wish to raise an issue with the program or extend it, please open a new issue on github.*
+**If you wish to raise an issue with the program or extend it, please open a new issue on github or fork and open a pull request.**
 
