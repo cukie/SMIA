@@ -1,7 +1,7 @@
-#SMIA-CUKIE
+# SMIA-CUKIE
 
-##Simultaneous Multichannel Immunofluorescense Digital Imaging Analyzer
-##By Gil Cukierman
+## Simultaneous Multichannel Immunofluorescense Digital Imaging Analyzer
+## By Gil Cukierman
 
 This application was created to bulk process and analyze batches of monochromatic images providing localization(masks), intensities, and similar quantifying values(markers), including collocalizations of multichannel monochromatic imunofluorescent images.
 
