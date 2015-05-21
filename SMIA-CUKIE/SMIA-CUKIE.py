@@ -249,7 +249,6 @@ def makenew():
 if __name__ == '__main__':
 
 
-
     ############### From Config ##########################
     from_config = Tk.Tk()
     from_config.wm_title("SMIA-CUKIE")
@@ -289,6 +288,8 @@ if __name__ == '__main__':
 
 
     from_config.mainloop()
+
+
     ################ First Options Window ############################
 
     first_options = Tk.Tk()
@@ -305,15 +306,6 @@ if __name__ == '__main__':
     white_list = []
     output_images = False
     output_thumbnails = False 
-
-    # imaging_stack_loc = os.path.join(os.path.expanduser('~'),"imaging_stack")
-
-    # program_loc_label = Tk.Label(first_options,anchor=Tk.CENTER,fg='red',text="MAKE SURE THIS PATH CORRESPONDS TO THE LOCATION OF YOUR 'imaging_stack' directory")
-    # program_loc_label.grid(columnspan=2)
-
-    # proloc_entry = Tk.Entry(first_options, width=80)
-    # proloc_entry.insert(0, imaging_stack_loc)
-    # browse3 = Tk.Button(first_options, text="Browse", command = setlocation)
 
     customFont = tkFont.Font(root=first_options,family="Helvetica", size=80)
 
@@ -477,14 +469,7 @@ if __name__ == '__main__':
 
     runanalysis(config_path)
 
-    # try:
-    #     images.main(config_path)
-    #     Tk.Tk().withdraw() # get rid of top level window
-    #     tkMessageBox.showinfo("Success!,","Success!!!\n See your results in: \n" + output_dir)
-    # except:
-    #     Tk.Tk().withdraw() # get rid of top level window
-    #     tkMessageBox.showerror("ERROR!", "An error occurred! \nSee terminal output")
-    #     print sys.exc_info()
+    
 
 
 
