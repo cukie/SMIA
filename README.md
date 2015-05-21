@@ -8,7 +8,7 @@ This application was created to bulk process and analyze batches of monochromati
 It can output both image and value(excel) outputs. 
 
 It was originally developed for use in:
-	J. Franco-Barraza et.al 2015 at the Cukierman Lab Fox Chase Cancer Center
+>	J. Franco-Barraza et.al 2015 at the Cukierman Lab Fox Chase Cancer Center
 
 
 **PLEASE FOLLOW THE INSTALLATION AND CONFIGURATION INSTRUCTIONS CAREFULLY, AS THEY CAN SEEM A BIT COMPLICATED AT FIRST.**
@@ -44,8 +44,11 @@ To run SMIA-CUKIE using the graphical interface, just double click on SMIA-CUKIE
 To run MakeBatches utility using the graphical interface, just double click on MakeBatches.py
 
 *If you don't plan on running this application from the command line, you may stop here*
-
-
+_
+_
+_
+_
+ 
 
 
 
