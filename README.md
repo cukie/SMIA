@@ -44,6 +44,7 @@ To run SMIA-CUKIE using the graphical interface, just double click on SMIA-CUKIE
 To run MakeBatches utility using the graphical interface, just double click on MakeBatches.py
 
 <br>
+*An example configuration file and images to test on have been provided in production_testers*
 <br>
 <br>
 *If you don't plan on running this application from the command line, you may stop here*
