@@ -153,6 +153,14 @@ def markerthings():
 
     markers.destroy()
 
+def addtowhitelistfield():
+    global white_list
+    op = input_entry.get()
+    input_entry.delete(0,Tk.END)
+    new_label = Tk.Label(white,fg='blue',text=op)
+    new_label.grid(columnspan=2)
+    white_list.append(op)
+
 def addtowhitelist():
     # On Enter, grab the option, and add it to the label list
     global white_list
@@ -450,11 +458,17 @@ if __name__ == '__main__':
 
     enter_button = Tk.Button(white, text="Enter", command = addtowhitelist)
 
+
+    input_entry = Tk.Entry(white,width=40)
+    enter_button2 = Tk.Button(white,text="Enter",command=addtowhitelistfield)
+
     pressme = Tk.Button(white, text="Run Analysis", command = whitelistcontinue)
 
 
     overlay_options.grid(row=0,column=0)
     enter_button.grid(row=0,column=1)
+    input_entry.grid(row=1,column=0)
+    enter_button2.grid(row=1,column=1)
     pressme.grid()
 
 

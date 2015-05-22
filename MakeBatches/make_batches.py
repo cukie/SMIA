@@ -20,6 +20,7 @@ import os
 import sys
 import shutil
 from sets import Set
+from PIL import Image 
 
 def IsolateUnique(filename):
 	part1 = filename.split('[')[1]
@@ -39,10 +40,22 @@ def main(base_directory):
 	# a set of all unique filenames
 	file_set = Set()
 
+	firstone = True 
+	size = None
+	listlen = 0
+	mode = None
 	print "isolating batches..."
 	# Get all unique batch names
 	for filename in all_files:
 		if filename.endswith('.tif') or filename.endswith('.tiff'):
+			# if this is the first image we are seeing, let's get our dimensions
+			if firstone: 
+				img = Image.open(os.path.join(base_dir,filename))
+				size = img.size
+				listlen = size[0]*size[1]
+				mode = img.mode
+				img.close()
+				firstone=False
 			isolated = IsolateUnique(filename)
 			file_set.add(isolated)
 
@@ -65,8 +78,18 @@ def main(base_directory):
 		sys.stdout.write("\r Percent Completed: %f" % (float(count)/len(all_files) * 100))
 		sys.stdout.flush()
 		count+=1
+
+		first=True
 		if filename.endswith('.tif') or filename.endswith('.tiff'):
 			isolated = IsolateUnique(filename)
+			if first:
+				# we have to write a blank image
+				# First let's write an all white "blank image to the file"
+				img = Image.new(mode,size)
+				imglist = [255]*listlen
+				img.putdata(imglist)
+				img.save(os.path.join(new_dir,isolated,'BLANK.tif'))
+				first=False
 			# status update
 			# we don't want to copy the im3 files...
 			shutil.copy(os.path.join(base_dir,filename), os.path.join(new_dir,isolated,filename))

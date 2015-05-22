@@ -18,6 +18,7 @@ import Tkinter as Tk
 import tkFileDialog
 import tkFont
 import tkMessageBox
+import make_batches
 
 def getdirectory():
 	"""
@@ -37,14 +38,16 @@ def RunMakeBatches():
 	"""
 	directory = directory_entry.get()
 	root.destroy()
-	try:
-		MakeBatches.main(directory)
-		Tk.Tk().withdraw()
-		tkMessageBox.showinfo("Success! \nBatches Made!")
-	except:
-		# Give error window
-		Tk.Tk().withdraw()
-		tkMessageBox.showerror("Error! \nPlease check terminal output.")
+
+	make_batches.main(directory)
+	# try:
+	# 	MakeBatches.main(directory)
+	# 	Tk.Tk().withdraw()
+	# 	tkMessageBox.showinfo("Success! \nBatches Made!")
+	# except:
+	# 	# Give error window
+	# 	Tk.Tk().withdraw()
+	# 	tkMessageBox.showerror("Error! \nPlease check terminal output.")
 
 # We only really need one window here...
 root = Tk.Tk()
