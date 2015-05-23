@@ -31,6 +31,7 @@ def IsolateUnique(filename):
 def main(base_directory):
 	# Grab the path to our top level directory
 	base_dir = base_directory
+	blank_image = None
 
 	parent_dir = os.path.join(os.path.dirname(base_dir), os.pardir)
 	print parent_dir
@@ -41,9 +42,7 @@ def main(base_directory):
 	file_set = Set()
 
 	firstone = True 
-	size = None
-	listlen = 0
-	mode = None
+
 	print "isolating batches..."
 	# Get all unique batch names
 	for filename in all_files:
@@ -55,7 +54,18 @@ def main(base_directory):
 				listlen = size[0]*size[1]
 				mode = img.mode
 				img.close()
+				del img 
 				firstone=False
+
+				# now let's make one blank image...
+				blank_image = Image.new(mode,size)
+				imglist = [255]*listlen
+				blank_image.putdata(imglist)
+				blank_image.save(os.path.join(parent_dir,'blanktemp.tif'))
+				blank_image.close()
+				del blank_image
+				del imglist
+
 			isolated = IsolateUnique(filename)
 			file_set.add(isolated)
 
@@ -80,21 +90,13 @@ def main(base_directory):
 		count+=1
 
 		first=True
+		# we don't want to copy the im3 files...
 		if filename.endswith('.tif') or filename.endswith('.tiff'):
 			isolated = IsolateUnique(filename)
 			if first:
-				# we have to write a blank image
-				# First let's write an all white "blank image to the file"
-				img = Image.new(mode,size)
-				imglist = [255]*listlen
-				img.putdata(imglist)
-				img.save(os.path.join(new_dir,isolated,'BLANK.tif'))
-
-				del imglist
-				img.close()
+				# copy our original blank image into this directory
+				shutil.copy(os.path.join(parent_dir,'blanktemp.tif'), os.path.join(new_dir,isolated,'BLANK.tif'))
 				first=False
-			# status update
-			# we don't want to copy the im3 files...
 			shutil.copy(os.path.join(base_dir,filename), os.path.join(new_dir,isolated,filename))
 
 	print "Success! Batches Made."
