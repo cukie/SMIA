@@ -89,6 +89,7 @@ def main(base_directory):
 				imglist = [255]*listlen
 				img.putdata(imglist)
 				img.save(os.path.join(new_dir,isolated,'BLANK.tif'))
+				img.close()
 				first=False
 			# status update
 			# we don't want to copy the im3 files...
