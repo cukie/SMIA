@@ -89,6 +89,8 @@ def main(base_directory):
 				imglist = [255]*listlen
 				img.putdata(imglist)
 				img.save(os.path.join(new_dir,isolated,'BLANK.tif'))
+
+				del imglist
 				img.close()
 				first=False
 			# status update
