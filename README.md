@@ -11,7 +11,7 @@ It was originally developed for use in:
 >	J. Franco-Barraza et.al 2015 at the Cukierman Lab Fox Chase Cancer Center
 
 
-**PLEASE FOLLOW THE INSTALLATION AND CONFIGURATION INSTRUCTIONS CAREFULLY, AS THEY CAN SEEM A BIT COMPLICATED AT FIRST.**
+**Please read installation instructions and relevant documentation BEFORE you begin.**
 
 *If you wish to raise an issue with the program or extend it, please open a new issue on github or fork and open a pull request.*
 
