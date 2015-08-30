@@ -3,10 +3,11 @@
 # @Author: cukie
 # @Date:   2015-08-30 11:05:36
 # @Last Modified by:   cukie
-# @Last Modified time: 2015-08-30 11:38:01
+# @Last Modified time: 2015-08-30 12:00:50
 
 import batch_runner
 import parse_config
+import sys
 
 
 def batchRunnerFromConfigDict(config_dict):
@@ -25,6 +26,7 @@ def batchRunnerFromConfigDict(config_dict):
 	output_images = config_dict['output_images']
 	output_thumbnails = config_dict['output_thumbnails']
 	# We want this as a dictionary for faster lookups
+	# TODO: this seems awkward.. right now it is maintained to keep compatibility with BatchImage objects.
 	white_list = {}
 	for sentence in config_dict['overlay_white_list']:
 		white_list[sentence] = sentence
@@ -57,7 +59,6 @@ def runSMIAFromConfig(config_file):
 
 	# Get our BatchRunner Object
 	batchRunner = batchRunnerFromConfigDict(config_dict)
-
 	# Here's where the magic happens
 	batchRunner.run()
 	
