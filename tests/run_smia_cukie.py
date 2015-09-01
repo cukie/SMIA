@@ -3,10 +3,11 @@
 # @Author: cukie
 # @Date:   2015-08-30 12:04:40
 # @Last Modified by:   cukie
-# @Last Modified time: 2015-08-30 13:22:22
+# @Last Modified time: 2015-09-01 06:16:33
 
 import unittest
 import mock
+import SMIA_CUKIE.smiaCukie.run_smia_cukie
 
 class TestRunSmiaCukie(unittest.TestCase):
 	'''Testing the functionality of SMIA-CUKIE.SMIA-CUKIE.run_smia_cukie.py'''
@@ -25,7 +26,7 @@ class TestRunSmiaCukie(unittest.TestCase):
 			'output_thumbnails':'',
 		} 
 
-	@mock.patch('SMIA_CUKIE.src.SMIA_CUKIE.run_smia_cukie.batch_runner.BatchRunner')
+	@mock.patch('SMIA_CUKIE.smiaCukie.run_smia_cukie.batch_runner.BatchRunner')
 	def testBatchRunnerFromConfigDict(self, batchrunner):
 		'''Test that we are grabbing parameters from the dict and creating a BatchRunner Object'''
 		print batchrunner
