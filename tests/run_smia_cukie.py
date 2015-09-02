@@ -3,33 +3,45 @@
 # @Author: cukie
 # @Date:   2015-08-30 12:04:40
 # @Last Modified by:   cukie
-# @Last Modified time: 2015-09-01 06:16:33
+# @Last Modified time: 2015-09-02 07:49:21
 
 import unittest
 import mock
-import SMIA_CUKIE.smiaCukie.run_smia_cukie
+from SMIA.smiaCukie import run_smia_cukie
 
 class TestRunSmiaCukie(unittest.TestCase):
 	'''Testing the functionality of SMIA-CUKIE.SMIA-CUKIE.run_smia_cukie.py'''
 	def setUp(self):
-		# A sentinel config dict 
+		# A config dict fixture
 		self.configuration_dict = {
-			'base_dir':'',
-			'num_layers':'',
-			'num_masks':'',
-			'num_markers':'',
-			'mask_names':'',
-			'marker_names':'',
-			'output_path':'',
-			'overlay_white_list':'',
-			'output_images':'',
-			'output_thumbnails':'',
+			'base_dir':'base',
+			'num_layers':'num',
+			'num_masks':'mask',
+			'num_markers':'marker',
+			'mask_names':'names',
+			'marker_names':'nombres',
+			'output_path':'output',
+			'overlay_white_list':'a',
+			'output_images':'images',
+			'output_thumbnails':'thumbnails',
 		} 
 
-	@mock.patch('SMIA_CUKIE.smiaCukie.run_smia_cukie.batch_runner.BatchRunner')
+	@mock.patch('SMIA.smiaCukie.run_smia_cukie.batch_runner.BatchRunner')
 	def testBatchRunnerFromConfigDict(self, batchrunner):
 		'''Test that we are grabbing parameters from the dict and creating a BatchRunner Object'''
-		print batchrunner
+		run_smia_cukie.batchRunnerFromConfigDict(self.configuration_dict)
+		batchrunner.assert_called_with(self.configuration_dict['base_dir'],
+										self.configuration_dict['num_layers'],
+										self.configuration_dict['num_masks'],
+										self.configuration_dict['num_markers'],
+										self.configuration_dict['mask_names'],
+										self.configuration_dict['marker_names'],
+										{self.configuration_dict['overlay_white_list']:self.configuration_dict['overlay_white_list']},
+										self.configuration_dict['output_images'],
+										self.configuration_dict['output_thumbnails'],
+										self.configuration_dict['output_path'],
+		)
+		
 
 if __name__ == '__main__':
     unittest.main()
