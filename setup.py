@@ -16,5 +16,5 @@ setup(
 	author = 'Gil Cukierman',
 	author_email = 'gil.cukierman@gmail.com',
 	packages = find_packages(),
-	requires = ['Pillow', 'numpy'],
+	requires = ['Pillow', 'numpy', 'mock'],
 	)
