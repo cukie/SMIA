@@ -10,8 +10,10 @@ It can output both image and value(excel) outputs.
 It was originally developed for use in:
 >	J. Franco-Barraza et.al 2015 at the Cukierman Lab Fox Chase Cancer Center
 
-**I am currently working on improvements to code quality, tests, documentation, and performance! Feel free to email me with any questions. gil(dot)cukierman(at)gmail** - cukie
+-------------------------------------------------------------------------------------------------------------
 
+**I am currently working on improvements to code quality, tests, documentation, and performance! Feel free to email me with any questions. gil(dot)cukierman(at)gmail** - cukie
+-------------------------------------------------------------------------------------------------------------
 
 **Please read installation instructions and relevant documentation BEFORE you begin.**
 
