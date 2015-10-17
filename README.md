@@ -12,7 +12,7 @@ It was originally developed for use in:
 
 -------------------------------------------------------------------------------------------------------------
 
-**I am currently working on improvements to code quality, tests, documentation, and performance! Feel free to email me with any questions. gil(dot)cukierman(at)gmail** - cukie
+*I am currently working on improvements to code quality, tests, documentation, and performance! Feel free to email me with any questions. gil(dot)cukierman(at)gmail* - cukie
 -------------------------------------------------------------------------------------------------------------
 
 **Please read installation instructions and relevant documentation BEFORE you begin.**
