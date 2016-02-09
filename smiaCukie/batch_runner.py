@@ -3,7 +3,7 @@
 # @Author: cukierma
 # @Date:   2015-08-30 09:19:30
 # @Last Modified by:   cukie
-# @Last Modified time: 2015-08-30 11:03:59
+# @Last Modified time: 2016-02-08 21:47:10
 
 # NOTE: This is just a working copy while we do our refactoring
 
@@ -11,7 +11,7 @@ from   PIL import Image
 import sys
 import os
 import itertools
-import BatchImage as BI 
+import BatchImage 
 import parse_config as pc 
 import time
 import csv
@@ -62,8 +62,8 @@ class BatchRunner():
 		# The main flow here is to loop through each directory creating a list of masks and marker objects respectively.
 		# We then create our BatchImage object, perform operations, and write results
 		for directory in self._listdir_fullpath(self.base_dir):
-			masks, markers = self._masksAndMarkersFromTopDir()
-			batch = BI.BatchImage(
+			masks, markers = self._masksAndMarkersFromDir(directory)
+			batch = BatchImage.BatchImage(
 				masks,
 				markers,
 				self.num_layers,
@@ -74,10 +74,10 @@ class BatchRunner():
 
 			# Give the object a reference to our current batch
 			self.currentBatch = batch
-
+			self.currentDirectory = directory
 			# now we performOps on our current BatchImage instance and save the results.
-			results = self._runOperations()
-			self._saveResults(results, directory) 
+			results = self._runOperations(self.currentBatch)
+			self._saveResults(results, self.currentDirectory) 
 
 	def _runOperations(self, batch):
 		'''
@@ -90,9 +90,9 @@ class BatchRunner():
 
 		output_dict = OrderedDict()
 		# make sure we always have a directory name
-		output_dict['Directory Name'] = directory
+		output_dict['Directory Name'] = self.currentDirectory
 
-		for results in self.currentBatch.performOps():
+		for results in self.currentBatch.PerformOps():
 			output_dict = self._mergeDicts(output_dict,results)
 
 		return output_dict
@@ -110,8 +110,8 @@ class BatchRunner():
 			writer = csv.DictWriter(f, fieldnames=fieldnames,dialect='excel')
 			writer.writeheader()
 
-		writer.writerow(output_dict)
-		del output_dict # TODO: Is this needed? Holdover from memory leak search?
+		writer.writerow(results_dict)
+		del results_dict # TODO: Is this needed? Holdover from memory leak search?
 
 		if self.output_images:
 			# Create a folder for each batch for image results
@@ -126,7 +126,7 @@ class BatchRunner():
 				img.save(os.path.join(save_location, name + '.tif'))
 				img.close()
 				
-		if output_thumbnails:
+		if self.output_thumbnails:
 			# Create a folder for each batch for image results
 
 			save_location = os.path.join(self.output_path, ntpath.basename(directory) + " thumbnails")
@@ -140,7 +140,7 @@ class BatchRunner():
 
 		f.close()
 
-	def mergeDicts(self,dict1,dict2):
+	def _mergeDicts(self,dict1,dict2):
 		"""
 		Takes two dictionaries and merges them.
 		"""
@@ -150,7 +150,74 @@ class BatchRunner():
 
 		return x
 
-	def _masksAndMarkersFromDir(self, dir):
+	def _maskOrMarker(self, pic_path):
+		"""
+		A little helper that takes a file prefix and returns "mask" if configuration file deemed it a mask and "marker" if deemed a marker.
+		
+		:returns string: "mask" or "marker" respectively according to the type of object we should create. 
+		:raise ValueError: an Exception if prefix isn't found in either configuration list.
+		"""
+
+
+		# The first item in each entry of our list is the unique identifier for each mask or marker.
+		mask_prefixes = [x[0] for x in self.mask_names]
+		marker_prefixes = [x[0] for x in self.marker_names]
+
+		# Is it a mask?
+		for mask_prefix in mask_prefixes:
+			if mask_prefix in pic_path:
+				return "mask"
+
+		# Is it a marker?
+		for marker_prefix in marker_prefixes:
+			if marker_prefix in pic_path:
+				return "marker"
+
+		raise ValueError("given marker or mask prefix not found while traversing directory for image: " + pic_path)
+
+	def _picObjInfoFromPath(self, pic_path):
+		'''Obtain our name, and threshold form mask_names or marker_names as needed, given a path'''
+
+		# it should be safe to do this because prefixes should be unique no matter what...
+		allPicNames = self.mask_names + self.marker_names
+
+		# Once we find the unique prefix in our path, we can return the iformation
+		for prefix, name, threshold in allPicNames:
+			if prefix in pic_path:
+				return name, threshold
+
+	def _getImage(self, pic_path):
+		'''wrapper to return an Image object given a path'''
+		im = Image.open(pic_path)
+
+		return im
+
+	def _createSinglePicObj(self, pic_path, withNegative=True):
+		'''
+		Helper that takes a pic path, and creates a mask or marker (depending on whether we've determined the path to be mask or marker
+
+		:param string pic_path: Absolute path of the image we want to create a pic object for
+		:param boolean withNegative: If set to true, we'll return two pic objects. One positive and one negative, relative to threshold.
+		:returns PicObj: Returns a Mask or Marker object as needed
+		'''
+
+		# First get the type of our needed object
+		picType = self._maskOrMarker(pic_path)
+		name, threshold = self._picObjInfoFromPath(pic_path)
+		image = self._getImage(pic_path)
+		if withNegative:
+			if 'mask' == picType:
+				return (BatchImage.Mask(image, name, threshold) , BatchImage.Mask(image, name, threshold, makeNegative=True))
+			if 'marker' == picType:
+				return (BatchImage.Marker(image, name, threshold), BatchImage.Marker(image, name, threshold, makeNegative=True))
+		else:
+			if 'mask' == picType:
+				return (BatchImage.Mask(image, name, threshold),)
+			if 'marker' == picType:
+				return (BatchImage.Marker(image, name, threshold),)
+
+
+	def _masksAndMarkersFromDir(self, directory):
 		'''
 		This helper function loops through our images and creates a list of masks and markers
 		in preparation for creating a BatchImage object.
@@ -159,16 +226,20 @@ class BatchRunner():
 		markers = []
 
 		for pic in self._listdir_fullpath(directory):
-			picType, picObj = self._createSinglePicObj(pic, withNegative=True)
+			picObj = self._createSinglePicObj(pic, withNegative=True)
 
-			if 'mask' == picType:
-				masks.append(picObj[1])
-				masks.append(picOBj[2])
-			if 'marker' == picType:
-				markers.append(picObj[1])
-				markers.append(picObj[2])
+			picType = None
+			if isinstance(picObj[0], BatchImage.Mask):
+				for mask in picObj:
+					masks.append(mask)
+
+			if isinstance(picObj[0], BatchImage.Marker):
+				for marker in picObj:
+					markers.append(marker)
+
 			#TODO: right now we are failing silently here...
 
+		print len(masks), len(markers)
 		return masks, markers 
 
 

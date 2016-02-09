@@ -3,7 +3,7 @@
 # @Author: cukie
 # @Date:   2015-08-30 11:05:36
 # @Last Modified by:   cukie
-# @Last Modified time: 2015-08-30 12:00:50
+# @Last Modified time: 2016-02-08 21:48:21
 
 import batch_runner
 import parse_config
@@ -64,9 +64,9 @@ def runSMIAFromConfig(config_file):
 	
 	#TODO: This is ugly... we really should be logging. 
 	print
-	print "You have succesfully procesed:\n" + base_dir
+	print "You have succesfully procesed:\n" + batchRunner.base_dir
 	print
-	print "See your results in:\n" + output_path
+	print "See your results in:\n" + batchRunner.output_path
 	print
 
 
