@@ -136,6 +136,9 @@ class BatchImage():
         # Let's just make sure everything is here and consistent
         # before we assign each value
         if num_pics != (len(self.masks) / 2 + len(self.markers)/2):
+            print num_pics
+            print len(self.masks)
+            print len(self.markers)
             raise ValueError("num_pics does not match the cumulative number of masks and markers passed into BatchImage instance.")
         else:
             self.num_pics = num_pics     
