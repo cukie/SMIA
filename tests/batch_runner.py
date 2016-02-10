@@ -3,12 +3,12 @@
 # @Author: cukie
 # @Date:   2015-09-02 17:56:53
 # @Last Modified by:   cukie
-# @Last Modified time: 2016-02-08 21:45:30
+# @Last Modified time: 2016-02-09 21:30:33
 
 import unittest
 import mock
-from SMIA.smiaCukie import batch_runner
-from SMIA.smiaCukie import BatchImage
+from ..smiaCukie import batch_runner
+from ..smiaCukie import BatchImage
 
 class testBatchRunner(unittest.TestCase):
 

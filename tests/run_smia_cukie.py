@@ -3,11 +3,11 @@
 # @Author: cukie
 # @Date:   2015-08-30 12:04:40
 # @Last Modified by:   cukie
-# @Last Modified time: 2015-09-02 07:49:21
+# @Last Modified time: 2016-02-09 21:28:56
 
 import unittest
 import mock
-from SMIA.smiaCukie import run_smia_cukie
+from ..smiaCukie import run_smia_cukie
 
 class TestRunSmiaCukie(unittest.TestCase):
 	'''Testing the functionality of SMIA-CUKIE.SMIA-CUKIE.run_smia_cukie.py'''
