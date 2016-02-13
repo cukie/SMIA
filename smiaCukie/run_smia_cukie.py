@@ -3,13 +3,16 @@
 # @Author: cukie
 # @Date:   2015-08-30 11:05:36
 # @Last Modified by:   cukie
-# @Last Modified time: 2016-02-12 18:20:30
+# @Last Modified time: 2016-02-12 19:34:20
 
 import argparse
 import batch_runner
+import logging
 import parse_config
 import sys
 
+
+logger = logging.getLogger(__name__)
 
 def batchRunnerFromConfigDict(config_dict):
     '''
@@ -56,33 +59,31 @@ def runSMIAFromConfig(config_file):
     # parse the json configuration file
     success, message, config_dict = parse_config.ParseConfig(config_file)
     if not success:
-        print "ERRORS: \n" + message
+        logger.error(message)
         sys.exit(1)
     else:
-        print message
+        logger.info(message)
 
     # Get our BatchRunner Object
     batchRunner = batchRunnerFromConfigDict(config_dict)
     # Here's where the magic happens
     batchRunner.run()
 
-    # TODO: This is ugly... we really should be logging.
-    print
-    print "You have succesfully procesed:\n" + batchRunner.base_dir
-    print
-    print "See your results in:\n" + batchRunner.output_path
-    print
-
+    logger.info("You have succesfully procesed: {0}".format(batchRunner.base_dir))
+    logger.info("Results can be found in: {0}".format(batchRunner.output_path))
 
 if __name__ == '__main__':
     '''Run SMIA-CUKIE from the command line'''
 
-    #TODO: Add optional arguments for logging handler configuration.
-    parser = argparse.ArgumentParser(description="Runs the SMIA-CUKIE software according to the given config file.")
+    logging.basicConfig(level=logging.DEBUG)
+
+    # TODO: Add optional arguments for logging handler configuration.
+    parser = argparse.ArgumentParser(
+        description="Runs the SMIA-CUKIE software according to the given config file.")
     parser.add_argument("config_file_name",
-    	 				help="The name of the text file containing the configuration for this run.",
-    	 				type=str
-    	 				)
+                        help="The name of the text file containing the configuration for this run.",
+                        type=str
+                        )
     args = parser.parse_args()
 
     runSMIAFromConfig(args.config_file_name)
