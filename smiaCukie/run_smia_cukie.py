@@ -3,7 +3,7 @@
 # @Author: cukie
 # @Date:   2015-08-30 11:05:36
 # @Last Modified by:   cukie
-# @Last Modified time: 2016-02-13 07:57:43
+# @Last Modified time: 2016-02-13 15:31:57
 
 import argparse
 import batch_runner
@@ -90,17 +90,29 @@ def run_smia_cukie(parsed_args):
 
     runSMIAFromConfig(parsed_args.config_file_name)
 
+def get_args_namespace(arg_string=None):
+    """A namespace based on arg_string or default sys.argv"""
+
+    import pdb
+    parser = argparse.ArgumentParser(
+    description="Runs the SMIA-CUKIE software according to the given config file.")
+    parser.add_argument("config_file_name",
+                    help="The name of the text file containing the configuration for this run.",
+                    type=str)
+    parser.add_argument("--verbose",
+                    help="Turn on verbose output. Equivalent to DEBUG level logging.",
+                    action="store_true")
+
+    if not arg_string:
+        args = parser.parse_args()
+    else:
+        pdb.set_trace()
+        args = parser.parse_args(arg_string)
+
+    return args
+
 if __name__ == '__main__':
     '''Run SMIA-CUKIE from the command line'''
 
-    parser = argparse.ArgumentParser(
-        description="Runs the SMIA-CUKIE software according to the given config file.")
-    parser.add_argument("config_file_name",
-                        help="The name of the text file containing the configuration for this run.",
-                        type=str)
-    parser.add_argument("--verbose",
-                        help="Turn on verbose output. Equivalent to DEBUG level logging.",
-                        action="store_true")
-    args = parser.parse_args()
-
+    args = get_args_namespace()
     run_smia_cukie(args)

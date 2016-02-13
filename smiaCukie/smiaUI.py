@@ -11,21 +11,24 @@ import os
 from sets import Set
 import itertools
 import json
-import images
+import run_smia_cukie
 import sys
 import tkFont
 
 
 def runanalysis(config_path):
     try:
-        images.main(config_path)
-        Tk.Tk().withdraw() # get rid of top level window
-        tkMessageBox.showinfo("Success!,","Success!!!\n")
+        # TODO: add logging and other command line flags here.
+        namespace = run_smia_cukie.get_args_namespace([config_path])
+        run_smia_cukie.run_smia_cukie(namespace)
+        Tk.Tk().withdraw()  # get rid of top level window
+        tkMessageBox.showinfo("Success!,", "Success!!!\n")
     except:
-        Tk.Tk().withdraw() # get rid of top level window
+        Tk.Tk().withdraw()  # get rid of top level window
         tkMessageBox.showerror("ERROR!", "An error occurred! \nSee terminal output")
         print sys.exc_info()
         sys.exit(1)
+
 
 def isuseless(name_list):
     for name in name_list:
@@ -34,11 +37,12 @@ def isuseless(name_list):
 
     return False
 
+
 def createdict():
     global basedir, output_dir,nummasks,nummarkers,mask_list,marker_list,output_images,output_thumbnails,white_list
 
     config = {}
-    
+
     config['base_directory'] = basedir
     config['num_pictures'] = nummasks+nummarkers
     config['num_masks'] = nummasks
