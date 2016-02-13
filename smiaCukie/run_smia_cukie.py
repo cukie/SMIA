@@ -3,7 +3,7 @@
 # @Author: cukie
 # @Date:   2015-08-30 11:05:36
 # @Last Modified by:   cukie
-# @Last Modified time: 2016-02-12 20:23:04
+# @Last Modified time: 2016-02-13 07:45:25
 
 import argparse
 import batch_runner
@@ -70,8 +70,23 @@ def runSMIAFromConfig(config_file):
     # Here's where the magic happens
     batchRunner.run()
 
-    logger.info("You have succesfully procesed: {0}".format(batchRunner.base_dir))
+    logger.info(
+        "You have succesfully procesed: {0}".format(batchRunner.base_dir))
     logger.info("Results can be found in: {0}".format(batchRunner.output_path))
+
+
+def run_smia_cukie(parsed_args):
+    '''
+    Runs SMIA-CUKIE. An entry point from any caller(front end).
+
+    :param argparse.Namespace parsed_args:
+
+    '''
+
+    loggingLevel = logging.DEBUG if parsed_args.verbose else logging.INFO
+    logging.basicConfig(level=loggingLevel)
+
+    runSMIAFromConfig(parsed_args.config_file_name)
 
 if __name__ == '__main__':
     '''Run SMIA-CUKIE from the command line'''
@@ -79,14 +94,11 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description="Runs the SMIA-CUKIE software according to the given config file.")
     parser.add_argument("config_file_name",
-    	help="The name of the text file containing the configuration for this run.",
-        type=str)
+                        help="The name of the text file containing the configuration for this run.",
+                        type=str)
     parser.add_argument("--verbose",
-        help="Turn on verbose output. Equivalent to DEBUG level logging.",
-        action="store_true")
+                        help="Turn on verbose output. Equivalent to DEBUG level logging.",
+                        action="store_true")
     args = parser.parse_args()
 
-    loggingLevel = logging.DEBUG if args.verbose else logging.INFO
-    logging.basicConfig(level=loggingLevel)
-
-    runSMIAFromConfig(args.config_file_name)
+    run_smia_cukie(args)
