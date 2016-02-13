@@ -3,7 +3,7 @@
 # @Author: cukierma
 # @Date:   2015-08-30 09:19:30
 # @Last Modified by:   cukie
-# @Last Modified time: 2016-02-13 16:09:13
+# @Last Modified time: 2016-02-13 16:20:20
 
 # NOTE: This is just a working copy while we do our refactoring
 
@@ -14,6 +14,7 @@ import csv
 from collections import OrderedDict
 import ntpath
 import logging
+import time
 
 
 logger = logging.getLogger(__name__)
@@ -66,10 +67,12 @@ class BatchRunner():
         # We then create our BatchImage object, perform operations, and write
         # results
 
-        # Open one results file for the whole batch. 'b' flag for other os's 
-        self.result_file = open(os.path.join(self.output_path, "results.csv"), 'wb')
+        # Open one results file for the whole batch. 'b' flag for other os's
+        self.result_file = open(
+            os.path.join(self.output_path, "results.csv"), 'wb')
 
         for directory in self._listdir_fullpath(self.base_dir):
+            t1 = time.time()
             masks, markers = self._masksAndMarkersFromDir(directory)
             batch = batch_image.BatchImage(
                 masks,
@@ -87,7 +90,8 @@ class BatchRunner():
             # results.
             results = self._runOperations(self.currentBatch)
             self._saveResults(results, self.currentDirectory)
-
+            logger.info(
+                "Ran {0} in {1} seconds".format(directory, time.time() - t1))
         # Make sure we clean up after ourselves.
         self.result_file.close()
 
@@ -115,16 +119,19 @@ class BatchRunner():
         '''
 
         # We must wait to create our write object because we won't know the fieldnames until
-        # the BatchImage object gives us results. This is not ideal and we shoul be able to 
-        # query the BatchImage object for these fieldnames after initialization of it in the future.
+        # the BatchImage object gives us results. This is not ideal and we shoul be able to
+        # query the BatchImage object for these fieldnames after initialization
+        # of it in the future.
 
         fieldnames = results_dict.keys()
-        writer = csv.DictWriter(self.result_file, fieldnames=fieldnames, dialect='excel')
+        writer = csv.DictWriter(
+            self.result_file, fieldnames=fieldnames, dialect='excel')
 
         if self.first_dir:
-	        logger.debug("First write into results.csv. Adding column names: {0}".format(fieldnames))
-        	writer.writeheader()
-        	self.first_dir = False
+            logger.debug(
+                "First write into results.csv. Adding column names: {0}".format(fieldnames))
+            writer.writeheader()
+            self.first_dir = False
 
         writer.writerow(results_dict)
 
@@ -148,7 +155,8 @@ class BatchRunner():
 
             save_location = os.path.join(
                 self.output_path, ntpath.basename(current_directory) + " thumbnails")
-            logger.debug("saving output thumbnails to: {0}".format(save_location))
+            logger.debug(
+                "saving output thumbnails to: {0}".format(save_location))
             os.makedirs(save_location)
 
             for image in self.currentBatch.AllResultThumbnails():
