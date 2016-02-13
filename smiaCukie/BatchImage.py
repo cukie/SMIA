@@ -23,6 +23,10 @@ import itertools
 import sys
 from collections import OrderedDict
 from PIL import Image
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 class Mask(object):
@@ -35,11 +39,11 @@ class Mask(object):
     another Mask object with the inverse mask of the first.
     """
     def __init__(self, img, name, threshold, makeNegative=False):
-        #TODO: represent negative images with inverse pixels...
+        # TODO: represent negative images with inverse pixels...
         self._img = img
-        self.threshold = threshold 
+        self.threshold = threshold
         self.pixel_list = list(img.getdata())
-        self.name = None 
+        self.name = None
         # check our flag to see get the right operator and name
         op = None
         if makeNegative:
@@ -182,25 +186,25 @@ class BatchImage():
         """
         mask_tuples = []
         count = 0
-        for lim in xrange(1,combination_max+1):
-                for item in itertools.combinations(mask_list,lim):
-                    
+        for lim in xrange(1, combination_max+1):
+                for item in itertools.combinations(mask_list, lim):
+
                     # Create our list of names
                     names = [x.name for x in item]
                     # If this combination is not useless...
                     if not self.IsUseless(names):
                         count += 1
-                        sys.stdout.write("\rProcessing Mask %i" % count)
-                        sys.stdout.flush()
+                        # TODO: A BatchImage object should really have a sense of what batch its operating on.
+                        # Some meta data like the path of the batch should be sufficient to log meaningful info.
+                        logger.debug("Processing Mask {0}".format(count))
                         # our original mask will have all indices in it
-                        output_mask = np.arange(0,self.num_pixels)
+                        output_mask = np.arange(0, self.num_pixels)
                         for mask in item:
                             # like a cumsum of intersections...
-                            output_mask = GetIntersection(output_mask,mask.masked_indices.flatten())
+                            output_mask = GetIntersection(output_mask, mask.masked_indices.flatten())
                         names = ', '.join(names)
                         # print output_mask.size
                         mask_tuples.append((output_mask, names))
-        sys.stdout.write("\n")
 
         return mask_tuples
 
