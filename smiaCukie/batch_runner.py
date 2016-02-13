@@ -3,13 +3,13 @@
 # @Author: cukierma
 # @Date:   2015-08-30 09:19:30
 # @Last Modified by:   cukie
-# @Last Modified time: 2016-02-13 08:50:03
+# @Last Modified time: 2016-02-13 14:05:45
 
 # NOTE: This is just a working copy while we do our refactoring
 
 from PIL import Image
 import os
-import BatchImage
+import batch_image
 import csv
 from collections import OrderedDict
 import ntpath
@@ -71,7 +71,7 @@ class BatchRunner():
 
         for directory in self._listdir_fullpath(self.base_dir):
             masks, markers = self._masksAndMarkersFromDir(directory)
-            batch = BatchImage.BatchImage(
+            batch = batch_image.BatchImage(
                 masks,
                 markers,
                 self.num_layers,
@@ -104,7 +104,7 @@ class BatchRunner():
         # make sure we always have a directory name
         output_dict['Directory Name'] = self.currentDirectory
 
-        for results in self.currentBatch.PerformOps():
+        for results in self.currentBatch.perform_ops():
             output_dict = self._mergeDicts(output_dict, results)
 
         return output_dict
@@ -147,7 +147,7 @@ class BatchRunner():
             # Create a folder for each batch for image results
 
             save_location = os.path.join(
-                self.output_path, ntpath.basename(directory) + " thumbnails")
+                self.output_path, ntpath.basename(current_directory) + " thumbnails")
             logger.debug("saving output thumbnails to: {0}".format(save_location))
             os.makedirs(save_location)
 
@@ -227,14 +227,14 @@ class BatchRunner():
         image = self._getImage(pic_path)
         if withNegative:
             if 'mask' == picType:
-                return (BatchImage.Mask(image, name, threshold), BatchImage.Mask(image, name, threshold, makeNegative=True))
+                return (batch_image.Mask(image, name, threshold), batch_image.Mask(image, name, threshold, makeNegative=True))
             if 'marker' == picType:
-                return (BatchImage.Marker(image, name, threshold), BatchImage.Marker(image, name, threshold, makeNegative=True))
+                return (batch_image.Marker(image, name, threshold), batch_image.Marker(image, name, threshold, makeNegative=True))
         else:
             if 'mask' == picType:
-                return (BatchImage.Mask(image, name, threshold),)
+                return (batch_image.Mask(image, name, threshold),)
             if 'marker' == picType:
-                return (BatchImage.Marker(image, name, threshold),)
+                return (batch_image.Marker(image, name, threshold),)
 
     def _masksAndMarkersFromDir(self, directory):
         '''
@@ -248,11 +248,11 @@ class BatchRunner():
             picObj = self._createSinglePicObj(pic, withNegative=True)
 
             picType = None
-            if isinstance(picObj[0], BatchImage.Mask):
+            if isinstance(picObj[0], batch_image.Mask):
                 for mask in picObj:
                     masks.append(mask)
 
-            if isinstance(picObj[0], BatchImage.Marker):
+            if isinstance(picObj[0], batch_image.Marker):
                 for marker in picObj:
                     markers.append(marker)
 
