@@ -3,7 +3,7 @@
 # @Author: cukierma
 # @Date:   2015-08-30 09:19:30
 # @Last Modified by:   cukie
-# @Last Modified time: 2016-02-12 19:52:01
+# @Last Modified time: 2016-02-13 08:50:03
 
 # NOTE: This is just a working copy while we do our refactoring
 
@@ -55,6 +55,7 @@ class BatchRunner():
         # We need a reference to the current BatchImage Object we are
         # processing for, thus, we save it here.
         self.currentBatch = None
+        self.result_file = None
 
     def run(self):
         '''
@@ -64,6 +65,10 @@ class BatchRunner():
         # The main flow here is to loop through each directory creating a list of masks and marker objects respectively.
         # We then create our BatchImage object, perform operations, and write
         # results
+
+        # Open one results file for the whole batch. 'b' flag for other os's 
+        self.result_file = open(os.path.join(self.output_path, "results.csv"), 'wb')
+
         for directory in self._listdir_fullpath(self.base_dir):
             masks, markers = self._masksAndMarkersFromDir(directory)
             batch = BatchImage.BatchImage(
@@ -82,6 +87,9 @@ class BatchRunner():
             # results.
             results = self._runOperations(self.currentBatch)
             self._saveResults(results, self.currentDirectory)
+
+        # Make sure we clean up after ourselves.
+        self.result_file.close()
 
     def _runOperations(self, batch):
         '''
@@ -106,16 +114,12 @@ class BatchRunner():
         We save results based on the output parameters passed into our BatchRunner instance
         '''
 
-        # TODO: This should be refactored so that we don't open and close the file for every directory.
-        # We should open this once per run. That means keeping one instance of f per run and one instance 
-        # of the writer per run.
+        # We must wait to create our write object because we won't know the fieldnames until
+        # the BatchImage object gives us results. This is not ideal and we shoul be able to 
+        # query the BatchImage object for these fieldnames after initialization of it in the future.
 
-        # open our results file
-        f = open(os.path.join(self.output_path, "results.csv"), 'wb')
-        writer = None
-
-        fieldnames = list(results_dict.keys())
-        writer = csv.DictWriter(f, fieldnames=fieldnames, dialect='excel')
+        fieldnames = results_dict.keys()
+        writer = csv.DictWriter(self.result_file, fieldnames=fieldnames, dialect='excel')
 
         if self.first_dir:
 	        logger.debug("First write into results.csv. Adding column names: {0}".format(fieldnames))
@@ -152,8 +156,6 @@ class BatchRunner():
                 name = image[1]
                 img.save(os.path.join(save_location, name + '.jpg'))
                 img.close()
-
-        f.close()
 
     def _mergeDicts(self, dict1, dict2):
         """
