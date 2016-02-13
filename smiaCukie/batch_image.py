@@ -43,9 +43,7 @@ class Mask(object):
         self._img = img
         self.threshold = threshold
         self.pixel_list = list(img.getdata())
-        self.name = None
-        # check our flag to see get the right operator and name
-        op = None
+
         if makeNegative:
             self.name = "NOT" + name
             op = operator.lt
@@ -103,25 +101,10 @@ class BatchImage():
         # A couple of boolean values for later
         self.makethumbnails = makethumbnails
         self.makeimages = makeimages
+        # TODO: take a white_list in: emphasis on list.. not dict
+        self.white_list = [operation.replace(" ", "") for operation in white_list]
 
-
-        self.white_list = {}
-        self.mask_white_list = {}
-
-        for key in white_list:
-            key_list = key.replace(',','')
-            key_list = key_list.split()
-            tupname = tuple(sorted(key_list))
-            self.white_list[tupname] = tupname
-
-        for key in white_list:
-            # Grab the list of masks which comes after under
-            mask = key.split('under')[1]
-            mask = ''.join(mask)
-            mask = mask.replace(',','')
-            mask = tuple(sorted(mask.split()))
-            self.mask_white_list[mask] = mask
-
+        # We validate out mask and marker lists before we accept them. 
         self.masks = []
         for mask in mask_list:
             if type(mask) is not Mask:
@@ -129,7 +112,6 @@ class BatchImage():
             else:
                 self.masks.append(mask)
         
-        # and let's do the same with our markers
         self.markers = []
         for marker in mark_list:
             if type(marker) is not Marker:
@@ -137,86 +119,30 @@ class BatchImage():
             else:
                 self.markers.append(marker)
 
-        # Let's just make sure everything is here and consistent
-        # before we assign each value
+        # sanity check. really unecessary... we should be able to deduce this ourselves. not trust the user.
         if num_pics != (len(self.masks) / 2 + len(self.markers)/2):
             raise ValueError("num_pics does not match the cumulative number of masks and markers passed into BatchImage instance.")
         else:
             self.num_pics = num_pics     
 
-        # Let's keep a record of the total number of pixels in an image
+        # We keep a record of some image attributes handy.
+        # Assumption: these will be the same across all images.
         self.size = self.masks[0]._img.size
         self.mode = self.masks[0]._img.mode
         self.num_pixels = self.size[0] * self.size[1]
 
-        self.mask_tuples = []
-        self.colloc_tuples = []
-        
-        self.CreateAllColloc()
-
         self.full_results = []
         self.thumbnail_results = []
-
-    def CreateAllMasks(self):
-        """
-        A helper that takes a list of masks and creates the powerset of them
-        minus the useless ones... Where useless is defined as a mask with 
-        itself and NOT itself in the same mask...
-
-        NOTE: does not include collocalized markers in masks 
-        """
-        
-        self.mask_tuples = self.MasksFromList(self.masks,self.num_pics)
-
-    def CreateAllColloc(self):
-        """
-        Creates all masks including those possibilities of 
-        collocalized masks.
-        """
-        self.colloc_tuples = self.MasksFromList(self.markers + self.masks,self.num_pics)
-
-    def MasksFromList(self, mask_list, combination_max):
-        """
-        Given a list of Mask or Marker objects
-        returns a list of all combinations of masks
-        in the form of a tuple. (mask_loc,name)
-        """
-        mask_tuples = []
-        count = 0
-        for lim in xrange(1, combination_max+1):
-                for item in itertools.combinations(mask_list, lim):
-
-                    # Create our list of names
-                    names = [x.name for x in item]
-                    # If this combination is not useless...
-                    if not self.IsUseless(names):
-                        count += 1
-                        # TODO: A BatchImage object should really have a sense of what batch its operating on.
-                        # Some meta data like the path of the batch should be sufficient to log meaningful info.
-                        logger.debug("Processing Mask {0}".format(count))
-                        # our original mask will have all indices in it
-                        output_mask = np.arange(0, self.num_pixels)
-                        for mask in item:
-                            # like a cumsum of intersections...
-                            output_mask = GetIntersection(output_mask, mask.masked_indices.flatten())
-                        names = ', '.join(names)
-                        mask_tuples.append((output_mask, names))
-
-        return mask_tuples
-
 
     def AllResultImages(self):
         """
         retrieve results images for the batch
-        Will return empty list if makeimages 
-        is set to False 
+        Will return empty list if makeimages
+        is set to False
         """
         count = 0
         for image in self.full_results:
-            count+=1
             yield image
-            if count == len(self.full_results):
-                del self.full_results
 
     def AllResultThumbnails(self):
         """
@@ -229,57 +155,65 @@ class BatchImage():
         for image in self.thumbnail_results:
             count+=1
             yield image
-        if count == len(self.thumbnail_results):
-            del self.thumbnail_results
 
-    def PerformOps(self, imageout=False, thumbnails=False):
+    def image_objs_by_names(self, names):
+        '''Fill me in'''
+
+        for image_obj in (self.masks + self.markers):
+            if image_obj.name in names:
+                yield image_obj
+
+    def perform_ops(self, imageout=False, thumbnails=False):
         """
         Generator to perform operations on data and images.
         """
 
-        # Instead of looping through all combinations of masks and markers,
-        # We should loop through all operation listed in the white_list.
-        # Markers come before 'under', masks come after.
-        # Each mask and marker knows its own 'name'.
-        # That gives us the ability to find the correct object given string
-        # input. 
+        for operation in self.white_list:
+            logger.debug("Attempting to perform operation named: {0}".format(operation))
+            split_under = operation.split('under')
 
-        count = 0 
-        # We are basically going to take the entire mask_tuples 
-        # structure and overlay it with every marker.
-        for combination in itertools.product(self.colloc_tuples,self.markers):
-            count+=1
-            mask_indices = combination[0][0]
-            mask_name = combination[0][1]
-            marker = combination[1]
+            delimeted_markers = split_under[0]
+            marker_names = delimeted_markers.split(',')
 
-            name = GetOverlayName(mask_name, marker.name)
-            name_list = name.replace(',','')
-            name_list = name_list.split()
-            if self.InWhiteList(name_list): 
-                # Get the values and indices from this overlay
-                values = GetValuesFromOverlay(mask_indices,marker)
-                indices = GetIndicesFromOverlay(mask_indices,marker)
+            delimeted_masks = split_under[1]
+            mask_names = delimeted_masks.split(',')
 
-                assert(values.size == indices.size)
-                
-                # add images to image results
-                if self.makeimages:
-                    self.full_results.append((self.MakeMaskImage(mask_indices), name + " Mask"))
-                    self.full_results.append((self.MakeOverlayImage(mask_indices, marker), name + " Marker"))
+            logger.debug("Found marker_names: {0}".format(marker_names))
+            logger.debug("Found mask_names: {0}".format(mask_names))
 
-                # add thumbnails to image results
-                if self.makethumbnails:
-                    self.thumbnail_results.append((self.MakeMaskThumbnails(mask_indices), name + " Mask"))
-                    self.thumbnail_results.append((self.MakeOverlayThumbnails(mask_indices, marker), name + " Marker"))
+            # Assumption: we are under the constraint of just one marker per operation
+            marker = list(self.image_objs_by_names(marker_names))[0]
+            masks = list(self.image_objs_by_names(mask_names))
 
-                # You can change which calculations are performed by
-                # editing the _Calculations function   
-                result_dict = self._Calculations(values,indices,mask_indices,name)
-                
-                yield result_dict
+            # initialize the mask to all 0s
+            mask_indices = np.arange(0, self.num_pixels)
+            for mask in masks:
+                # like a cumsum of intersections...
+                mask_indices = GetIntersection(mask_indices, mask.masked_indices.flatten())
+            
+            values = GetValuesFromOverlay(mask_indices,marker)
+            indices = GetIndicesFromOverlay(mask_indices,marker)
 
-    def _Calculations(self, result_values ,result_indices ,mask_indices, name):
+            assert(values.size == indices.size)
+            
+            # add images to image results
+            if self.makeimages:
+                self.full_results.append((self.MakeMaskImage(mask_indices), operation + " Mask"))
+                self.full_results.append((self.MakeOverlayImage(mask_indices, marker), operation + " Marker"))
+
+            # add thumbnails to image results
+            if self.makethumbnails:
+                self.thumbnail_results.append((self.MakeMaskThumbnails(mask_indices), operation + " Mask"))
+                self.thumbnail_results.append((self.MakeOverlayThumbnails(mask_indices, marker), operation + " Marker"))
+
+            # You can change which calculations are performed by
+            # editing the _Calculations function   
+            result_dict = self.calculations(values,indices,mask_indices,operation)
+            
+            yield result_dict
+
+
+    def calculations(self, result_values, result_indices, mask_indices, name):
         """
         returns an OrderedDict of keys and values where
         key is operation name and value is the result of
@@ -330,32 +264,6 @@ class BatchImage():
             
         return result_dict
 
-    def IsUseless(self, names):
-        """
-        takes a proposed mask name and tells you if it's useless.
-        Useless is defined as a mask with itself and not itself 
-        within one name.
-
-        Extended to also define Useless as a mask combination
-        not in our white list. 
-        """
-
-        tupnames = tuple(sorted(names))
-        if tupnames in self.mask_white_list:
-            return False
-        else:
-            return True
-
-    def InWhiteList(self, names):
-        """
-        Returns true if a name is in the white list
-        """
-        tupnames = tuple(sorted(names))
-        if tupnames in self.white_list:
-            return True
-        else:
-            return False
-
     def MakeMaskImage(self,mask_indices):
         """
         Given a list of mask indices, returns an image representation
@@ -402,7 +310,6 @@ class BatchImage():
         delegates to MakeMaskImage and creates thumbnail
         """
 
-        # delegation woohoo!
         img = self.MakeMaskImage(mask_indices)
 
         img.thumbnail((128, 128))
@@ -413,7 +320,6 @@ class BatchImage():
         delegates to MakeOverlayImage and creates thumbnail
         """
 
-        # deeelegate good times, come on!
         img = self.MakeOverlayImage(mask_indices, marker)
 
         img.thumbnail((128, 128))
@@ -463,10 +369,6 @@ def GetIndicesFromOverlay(mask_indices, marker):
     """
 
     return GetIntersection(mask_indices, marker.masked_indices)
-
-
-def GetOverlayName(mask_name, marker_name):
-    return marker_name + " under " + mask_name
 
 
 def GetIntersection(arr1, arr2):
