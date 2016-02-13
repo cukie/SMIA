@@ -237,6 +237,13 @@ class BatchImage():
         Generator to perform operations on data and images.
         """
 
+        # Instead of looping through all combinations of masks and markers,
+        # We should loop through all operation listed in the white_list.
+        # Markers come before 'under', masks come after.
+        # Each mask and marker knows its own 'name'.
+        # That gives us the ability to find the correct object given string
+        # input. 
+
         count = 0 
         # We are basically going to take the entire mask_tuples 
         # structure and overlay it with every marker.
