@@ -106,7 +106,16 @@ def GetPicList(basedir):
         -> batch2
     """
 
-    pic_list = os.listdir(os.path.join(basedir,(os.listdir(basedir)[2])))
+    filename = ''
+    for name in os.listdir(basedir):
+        if not name.startswith('.'):
+            filename = name
+            break
+
+    if not filename:
+        raise ValueError("Couldn't find any non-hidden directories in basedir")
+
+    pic_list = os.listdir(os.path.join(basedir,filename))
 
     for pic in pic_list:
         pic = pic.replace('.tif','')

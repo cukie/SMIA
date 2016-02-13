@@ -3,7 +3,7 @@
 # @Author: cukierma
 # @Date:   2015-08-30 09:19:30
 # @Last Modified by:   cukie
-# @Last Modified time: 2016-02-13 14:05:45
+# @Last Modified time: 2016-02-13 16:09:13
 
 # NOTE: This is just a working copy while we do our refactoring
 
@@ -273,4 +273,6 @@ class BatchRunner():
         of the relative paths
         """
         for f in os.listdir(d):
+            if f.startswith('.'):
+                continue
             yield os.path.join(d, f)

@@ -3,7 +3,7 @@
 # @Author: cukie
 # @Date:   2015-08-30 11:05:36
 # @Last Modified by:   cukie
-# @Last Modified time: 2016-02-13 15:31:57
+# @Last Modified time: 2016-02-13 16:02:41
 
 import argparse
 import batch_runner
@@ -93,7 +93,6 @@ def run_smia_cukie(parsed_args):
 def get_args_namespace(arg_string=None):
     """A namespace based on arg_string or default sys.argv"""
 
-    import pdb
     parser = argparse.ArgumentParser(
     description="Runs the SMIA-CUKIE software according to the given config file.")
     parser.add_argument("config_file_name",
@@ -106,7 +105,6 @@ def get_args_namespace(arg_string=None):
     if not arg_string:
         args = parser.parse_args()
     else:
-        pdb.set_trace()
         args = parser.parse_args(arg_string)
 
     return args
