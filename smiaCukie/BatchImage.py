@@ -140,9 +140,6 @@ class BatchImage():
         # Let's just make sure everything is here and consistent
         # before we assign each value
         if num_pics != (len(self.masks) / 2 + len(self.markers)/2):
-            print num_pics
-            print len(self.masks)
-            print len(self.markers)
             raise ValueError("num_pics does not match the cumulative number of masks and markers passed into BatchImage instance.")
         else:
             self.num_pics = num_pics     
@@ -203,7 +200,6 @@ class BatchImage():
                             # like a cumsum of intersections...
                             output_mask = GetIntersection(output_mask, mask.masked_indices.flatten())
                         names = ', '.join(names)
-                        # print output_mask.size
                         mask_tuples.append((output_mask, names))
 
         return mask_tuples
@@ -251,7 +247,6 @@ class BatchImage():
             marker = combination[1]
 
             name = GetOverlayName(mask_name, marker.name)
-            # print name
             name_list = name.replace(',','')
             name_list = name_list.split()
             if self.InWhiteList(name_list): 
@@ -259,9 +254,7 @@ class BatchImage():
                 values = GetValuesFromOverlay(mask_indices,marker)
                 indices = GetIndicesFromOverlay(mask_indices,marker)
 
-                if values.size != indices.size:
-                    print "WRONG"
-                    exit(1)
+                assert(values.size == indices.size)
                 
                 # add images to image results
                 if self.makeimages:
@@ -351,7 +344,6 @@ class BatchImage():
         Returns true if a name is in the white list
         """
         tupnames = tuple(sorted(names))
-        # print tupnames
         if tupnames in self.white_list:
             return True
         else:
@@ -374,21 +366,19 @@ class BatchImage():
 
         return image 
 
-    def MakeOverlayImage(self,mask_indices,marker):
+    def MakeOverlayImage(self, mask_indices,marker):
         """
         Given mask indices and a marker, returns an image
-        with a black background and the underlying marker 
+        with a black background and the underlying marker
         pixels (only the marker pixels under the mask)
         """
 
         # initialize an empty array of zeros(black pixels)
         ret_image = np.zeros((self.num_pixels,))
 
-        indices = GetIntersection(mask_indices,marker.masked_indices)
+        indices = GetIntersection(mask_indices, marker.masked_indices)
 
         pixel_list = np.asarray(marker.pixel_list)
-
-        # print pixel_list
 
         for index in indices:
             ret_image[index] = pixel_list[index]
@@ -398,7 +388,7 @@ class BatchImage():
 
         image.putdata(ret_image.tolist())
 
-        return image 
+        return image
 
     def MakeMaskThumbnails(self, mask_indices):
         """
@@ -408,7 +398,7 @@ class BatchImage():
         # delegation woohoo!
         img = self.MakeMaskImage(mask_indices)
 
-        img.thumbnail((128,128))
+        img.thumbnail((128, 128))
         return img
 
     def MakeOverlayThumbnails(self, mask_indices, marker):
@@ -419,9 +409,10 @@ class BatchImage():
         # deeelegate good times, come on!
         img = self.MakeOverlayImage(mask_indices, marker)
 
-        img.thumbnail((128,128))
+        img.thumbnail((128, 128))
 
         return img
+
 
 def IndicesByThreshold(pixel_list, threshold, op):
     """
@@ -435,10 +426,11 @@ def IndicesByThreshold(pixel_list, threshold, op):
 
     pixel_arr = np.asarray(pixel_list)
     indices = np.argwhere(op(pixel_arr, threshold))
-    return indices 
+    
+    return indices
 
 
-def GetValuesFromOverlay(mask_indices,marker):
+def GetValuesFromOverlay(mask_indices, marker):
     """
     Reveals the values of a marker underneath a mask.
     Takes in a numpy array of valid indices and returns
@@ -455,6 +447,7 @@ def GetValuesFromOverlay(mask_indices,marker):
 
     return values
 
+
 def GetIndicesFromOverlay(mask_indices, marker):
     """
     returns indices from an overlay.
@@ -462,10 +455,12 @@ def GetIndicesFromOverlay(mask_indices, marker):
     more sense
     """
 
-    return GetIntersection(mask_indices,marker.masked_indices)
+    return GetIntersection(mask_indices, marker.masked_indices)
+
 
 def GetOverlayName(mask_name, marker_name):
     return marker_name + " under " + mask_name
+
 
 def GetIntersection(arr1, arr2):
     """
@@ -473,8 +468,5 @@ def GetIntersection(arr1, arr2):
     of values
     """
 
-    #TODO: check "true" flag... this could speed things up.
+    # TODO: check "true" flag... this could speed things up.
     return np.intersect1d(arr1, arr2)
-
-
-

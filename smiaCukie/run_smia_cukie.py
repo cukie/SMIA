@@ -3,7 +3,7 @@
 # @Author: cukie
 # @Date:   2015-08-30 11:05:36
 # @Last Modified by:   cukie
-# @Last Modified time: 2016-02-13 07:45:25
+# @Last Modified time: 2016-02-13 07:57:43
 
 import argparse
 import batch_runner
@@ -12,7 +12,8 @@ import parse_config
 import sys
 
 
-logger = logging.getLogger(__name__)
+# makes logs more clear when we invoke from the command line
+logger = logging.getLogger('run_smia_cukie')
 
 
 def batchRunnerFromConfigDict(config_dict):
@@ -51,9 +52,10 @@ def batchRunnerFromConfigDict(config_dict):
 
 def runSMIAFromConfig(config_file):
     '''
-    An entry point to the SMIA-CUKIE application. This will kick off a run as specified by the configuration file.
+    An entry point to the SMIA-CUKIE application.
+    This will kick off a run as specified by the configuration file.
 
-    :param string config_file: The absolute path to a properly formatted config file.
+    :param string config_file: The absolute path to a config file.
 
     '''
 
