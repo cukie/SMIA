@@ -3,22 +3,16 @@
 # @Author: cukierma
 # @Date:   2015-08-30 09:19:30
 # @Last Modified by:   cukie
-# @Last Modified time: 2016-02-12 19:45:37
+# @Last Modified time: 2016-02-12 19:52:01
 
 # NOTE: This is just a working copy while we do our refactoring
 
 from PIL import Image
-import sys
 import os
-import itertools
 import BatchImage
-import parse_config as pc
-import time
 import csv
 from collections import OrderedDict
-import json
 import ntpath
-import gc
 import logging
 
 
