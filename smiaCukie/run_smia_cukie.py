@@ -3,7 +3,7 @@
 # @Author: cukie
 # @Date:   2015-08-30 11:05:36
 # @Last Modified by:   cukie
-# @Last Modified time: 2016-02-12 20:02:46
+# @Last Modified time: 2016-02-12 20:23:04
 
 import argparse
 import batch_runner
@@ -14,10 +14,11 @@ import sys
 
 logger = logging.getLogger(__name__)
 
+
 def batchRunnerFromConfigDict(config_dict):
     '''
     Creates a BatchRunner instance from a given configuration dictionary mapping input parameters to values.
-    See batch_runner.BatchRunner for an explanation of parameters. 
+    See batch_runner.BatchRunner for an explanation of parameters.
     '''
 
     base_dir = config_dict['base_dir']
@@ -75,15 +76,14 @@ def runSMIAFromConfig(config_file):
 if __name__ == '__main__':
     '''Run SMIA-CUKIE from the command line'''
 
-    # TODO: Add optional arguments for logging handler configuration.
     parser = argparse.ArgumentParser(
         description="Runs the SMIA-CUKIE software according to the given config file.")
     parser.add_argument("config_file_name",
     	help="The name of the text file containing the configuration for this run.",
-    	type=str)
+        type=str)
     parser.add_argument("--verbose",
-    	help="Turn on verbose output. Equivalent to DEBUG level logging.",
-    	action="store_true")
+        help="Turn on verbose output. Equivalent to DEBUG level logging.",
+        action="store_true")
     args = parser.parse_args()
 
     loggingLevel = logging.DEBUG if args.verbose else logging.INFO
