@@ -292,34 +292,38 @@ class BatchImage():
         result_dict = OrderedDict()
 
         # Add or remove(comment out) calculations here
+
+        # Because the results will be messed up if we don't have all the fieldnames
+        # for each batch image, make sure we give an entry even if we fail in the form
+        # of NaN
         try:
             result_dict[name + ' mean'] = result_values.mean()
         except:
-            pass
+            result_dict[name + ' mean'] = 'NaN'
         try:
             result_dict[name + ' median'] = np.median(result_values)
         except:
-            pass
+            result_dict[name + ' median'] = 'NaN'
         try:
             result_dict[name + ' st.dev'] = result_values.std()
         except:
-            pass
+            result_dict[name + ' st.dev'] = 'NaN'
         try: 
             result_dict[name + ' pcnt. coverage r.t. image'] = repr((float(result_values.size)/self.num_pixels) * 100)
         except: 
-            pass
+            result_dict[name + ' pcnt. coverage r.t. image'] = 'NaN'
         try:
             result_dict[name + ' pcnt. coverage r.t. mask'] = repr((float(result_values.size)/float(mask_indices.size)) * 100)
         except:
-            pass
+            result_dict[name + ' pcnt. coverage r.t. mask'] = 'NaN'
         try:
             result_dict[name + ' total intensity'] = result_values.cumsum()[-1]
         except:
-            pass
+            result_dict[name + ' total intensity'] = 'NaN'
         try:
             result_dict[name + 'integrated intensity r.t. mask'] = float(result_values.cumsum()[-1])/mask_indices.size
         except:
-            pass
+            result_dict[name + 'integrated intensity r.t. mask'] = 'NaN'
             
         return result_dict
 
