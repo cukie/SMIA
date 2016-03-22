@@ -277,39 +277,51 @@ class BatchImage():
 
         # results go here under name, value pairs in dict
         result_dict = OrderedDict()
-        exception_msg = "{op_name} failed for {result_name}"
+        exception_msg = "{0} failed for {1}"
 
         # Add or remove(comment out) calculations here
+
+        # In the Except block we always set the field to NaN so that we 
+        # have traceability into the fact that something went wrong...
+        # TODO: consider adding the error message into the field...
         try:
             result_dict[name + ' mean'] = result_values.mean()
         except:
+            result_dict[name + ' mean'] = 'NaN'
             logger.exception(exception_msg.format('mean', name))
         try:
             result_dict[name + ' median'] = np.median(result_values)
         except:
+            result_dict[name + ' median'] = 'NaN'
             logger.exception(exception_msg.format('median', name))
         try:
             result_dict[name + ' st.dev'] = result_values.std()
         except:
+            result_dict[name + ' st.dev'] = 'NaN'
             logger.exception(exception_msg.format('st.dev', name))
         try:
             result_dict[name + ' pcnt. coverage r.t. image'] = repr(
                 (float(result_values.size) / self.num_pixels) * 100)
         except:
+            result_dict[name + ' pcnt. coverage r.t. image'] = 'NaN'
             logger.exception(exception_msg.format('pcnt. coverage r.t. image', name))
         try:
             result_dict[name + ' pcnt. coverage r.t. mask'] = repr(
                 (float(result_values.size) / float(mask_indices.size)) * 100)
         except:
+            result_dict[name + ' pcnt. coverage r.t. mask'] = 'NaN'
             logger.exception(exception_msg.format('pcnt. coverage r.t. mask', name))
         try:
             result_dict[name + ' total intensity'] = result_values.cumsum()[-1]
         except:
+            result_dict[name + ' total intensity'] = 'NaN'
             logger.exception(exception_msg.format('total intensity', name))
         try:
             result_dict[
                 name + 'integrated intensity r.t. mask'] = float(result_values.cumsum()[-1]) / mask_indices.size
         except:
+            result_dict[
+                name + 'integrated intensity r.t. mask'] = 'NaN'
             logger.exception(exception_msg.format('integrated intensity r.t. mask', name))
 
         return result_dict
