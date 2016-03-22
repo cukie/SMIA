@@ -1,7 +1,13 @@
-# SMIA-CUKIE
+### SMIA-CUKIE
 
-## Simultaneous Multichannel Immunofluorescense Digital Imaging Analyzer
-## By Gil Cukierman
+### Simultaneous Multichannel Immunofluorescense Digital Imaging Analyzer
+
+------------------------------------------------------------------
+
+For a beta version with many updates please see the *development* branch. Updates include refactored and cleaner logic, more robust querying, and cleaner installations (with a requirements.txt)
+
+------------------------------------------------------------------
+
 
 This application was created to bulk process and analyze batches of monochromatic images providing localization(masks), intensities, and similar quantifying values(markers), including collocalizations of multichannel monochromatic imunofluorescent (or IHC, etc.) images.
 
@@ -10,14 +16,8 @@ It can output both image and value(excel) outputs.
 It was originally developed for use in:
 >	J. Franco-Barraza et.al 2015 at the Cukierman Lab Fox Chase Cancer Center
 
--------------------------------------------------------------------------------------------------------------
 
-I am currently working on improvements to code quality, tests, documentation, and performance! Feel free to email me with any questions. gil(dot)cukierman(at)gmail - cukie
--------------------------------------------------------------------------------------------------------------
 
-**Please read installation instructions and relevant documentation BEFORE you begin.**
-
-*If you wish to raise an issue with the program or extend it, please open a new issue on github or fork and open a pull request.*
 
 **Installation:**
 
@@ -163,9 +163,5 @@ To run the program, open a terminal(mac) or command prompt(windows), and type th
 
 If the program runs successfully (can take several minutes if there are many images and/or operation to analyze) you will see a message telling you that 'you have successfully proccessed:' your images, and where you can find your results. 
 
-**QUESTIONS/COMMENTS:**
 
 For general inquiries please contact **Dr. Edna Cukierman**
-
-**If you wish to raise an issue with the program or extend it, please open a new issue on github or fork and open a pull request.**
-
