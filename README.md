@@ -11,10 +11,10 @@ For a beta version with many updates please see the development branch. Updates 
 
 This application was created to bulk process and analyze batches of monochromatic images providing localization (masks), intensities, and similar quantifying values (markers), including co-localizations of multichannel monochromatic immunofluorescent (or IHC, etc.) images.
 
-It can output both image and value (excel) outputs.  
+It creates both image and value (excel) outputs.  
 
 It was originally developed for use in:
->	J. Franco-Barraza et.al 2016. 
+>	J. Franco-Barraza et.al 2017. *eLife* http://dx.doi.org/10.7554/eLife.20600 
 >       Cukierman Lab
 >	Fox Chase Cancer Center, Philadelphia, PA 19111.
 
@@ -165,5 +165,6 @@ To run the program, open a terminal(mac) or command prompt(windows), and type th
 If the program runs successfully (can take several minutes if there are many images and/or operation to analyze) you will see a message telling you that 'you have successfully processed:' your images, and where you can find your results. 
 
 For general inquiries please contact *Dr. Edna Cukierman.*
+https://www.foxchase.org/edna-cukierman
 Email: EdnaCukierman@gmail.com
 
