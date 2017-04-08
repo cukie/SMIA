@@ -1,8 +1,3 @@
-# Author: Gil Cukierman
-# gil.cukierman (at) gmail.com
-# Creation Date: 5/4/15
-# (c) All Rights Reserved
-
 """
 The BatchImage module defines Mask Objects and Marker Objects.
 Most importantly it defines BatchImage Objects which are aggregations
@@ -103,7 +98,7 @@ class BatchImage():
         # A couple of boolean values for later
         self.makethumbnails = makethumbnails
         self.makeimages = makeimages
-        # TODO: take a white_list in: emphasis on list.. not dict
+        # TODO: this should probably be some kind of strip to be more accurate...
         self.white_list = [
             operation.replace(" ", "") for operation in white_list]
 

@@ -1,12 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# @Author: cukierma
-# @Date:   2015-08-30 09:19:30
-# @Last Modified by:   cukie
-# @Last Modified time: 2016-02-13 16:20:20
-
-# NOTE: This is just a working copy while we do our refactoring
-
 from PIL import Image
 import os
 import batch_image
@@ -21,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 class BatchRunner():
-    '''
+    """
     This class encapsulates all the necessary information to run a batch of images.
     It takes in a set of parameters that help define the inputs and outputs of a batch run.
 
@@ -36,7 +27,7 @@ class BatchRunner():
     :param boolean output_thumbnails: A flag to denote whether we want to output thumbnail images of results
     :param string output_path: The absolute path of where we want to save our results
 
-    '''
+    """
 
     def __init__(self, base_dir, num_layers, num_masks, num_markers, mask_names, marker_names,
                  white_list, output_images, output_thumbnails, output_path):
@@ -59,9 +50,9 @@ class BatchRunner():
         self.result_file = None
 
     def run(self):
-        '''
+        """
         Runs a batch of images according to the parameters passed upon initialization of our BatchRunner object.
-        '''
+        """
 
         # The main flow here is to loop through each directory creating a list of masks and marker objects respectively.
         # We then create our BatchImage object, perform operations, and write
@@ -96,13 +87,13 @@ class BatchRunner():
         self.result_file.close()
 
     def _runOperations(self, batch):
-        '''
+        """
         Takes a batch and calls performOps on it, aggregating results as we go in an OrderedDict.
 
         :param BatchImage batch: The batch we want to run
         :return OrderedDict: An OrderedDict of resutls.
 
-        '''
+        """
 
         output_dict = OrderedDict()
         # make sure we always have a directory name
@@ -114,9 +105,9 @@ class BatchRunner():
         return output_dict
 
     def _saveResults(self, results_dict, current_directory):
-        '''
+        """
         We save results based on the output parameters passed into our BatchRunner instance
-        '''
+        """
 
         # We must wait to create our write object because we won't know the fieldnames until
         # the BatchImage object gives us results. This is not ideal and we shoul be able to
@@ -202,32 +193,39 @@ class BatchRunner():
             "given marker or mask prefix not found while traversing directory for image: " + pic_path)
 
     def _picObjInfoFromPath(self, pic_path):
-        '''Obtain our name, and threshold form mask_names or marker_names as needed, given a path'''
+        """Obtain our name, and threshold form mask_names or marker_names as needed, given a path.
+        
+        Constraints on image identification:
+        1. Only the base name of the path will be used
+        2. Only the last section of the file name after the final ']' will be used
+        3. marker and mask names must be unique (otherwise you'll get non-deterministic behavior!
+        4. a marker or mask name can not be a subset of any other marker or mask name.
+        """
 
         # it should be safe to do this because prefixes should be unique no
         # matter what...
         allPicNames = self.mask_names + self.marker_names
 
-        # Once we find the unique prefix in our path, we can return the
-        # iformation
+        pic_path = os.path.basename(pic_path)
+        pic_path = pic_path.split(']')[-1]
         for prefix, name, threshold in allPicNames:
             if prefix in pic_path:
                 return name, threshold
 
     def _getImage(self, pic_path):
-        '''wrapper to return an Image object given a path'''
+        """wrapper to return an Image object given a path"""
         im = Image.open(pic_path)
 
         return im
 
     def _createSinglePicObj(self, pic_path, withNegative=True):
-        '''
+        """
         Helper that takes a pic path, and creates a mask or marker (depending on whether we've determined the path to be mask or marker
 
         :param string pic_path: Absolute path of the image we want to create a pic object for
         :param boolean withNegative: If set to true, we'll return two pic objects. One positive and one negative, relative to threshold.
         :returns PicObj: Returns a Mask or Marker object as needed
-        '''
+        """
 
         # First get the type of our needed object
         picType = self._maskOrMarker(pic_path)
@@ -245,10 +243,10 @@ class BatchRunner():
                 return (batch_image.Marker(image, name, threshold),)
 
     def _masksAndMarkersFromDir(self, directory):
-        '''
+        """
         This helper function loops through our images and creates a list of masks and markers
         in preparation for creating a BatchImage object.
-        '''
+        """
         masks = []
         markers = []
 

@@ -1,10 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# @Author: cukie
-# @Date:   2015-08-30 11:05:36
-# @Last Modified by:   cukie
-# @Last Modified time: 2016-02-13 16:02:41
-
 import argparse
 import batch_runner
 import logging
@@ -13,14 +6,13 @@ import sys
 
 
 # makes logs more clear when we invoke from the command line
-logger = logging.getLogger('run_smia_cukie')
+logger = logging.getLogger(__name__)
 
 
 def batchRunnerFromConfigDict(config_dict):
-    '''
-    Creates a BatchRunner instance from a given configuration dictionary mapping input parameters to values.
+    """Creates a BatchRunner instance from a given configuration dictionary mapping input parameters to values.
     See batch_runner.BatchRunner for an explanation of parameters.
-    '''
+    """
 
     base_dir = config_dict['base_dir']
     num_layers = config_dict['num_layers']
@@ -51,13 +43,13 @@ def batchRunnerFromConfigDict(config_dict):
 
 
 def runSMIAFromConfig(config_file):
-    '''
+    """
     An entry point to the SMIA-CUKIE application.
     This will kick off a run as specified by the configuration file.
 
     :param string config_file: The absolute path to a config file.
 
-    '''
+    """
 
     # parse the json configuration file
     success, message, config_dict = parse_config.ParseConfig(config_file)
@@ -78,12 +70,12 @@ def runSMIAFromConfig(config_file):
 
 
 def run_smia_cukie(parsed_args):
-    '''
+    """
     Runs SMIA-CUKIE. An entry point from any caller(front end).
 
     :param argparse.Namespace parsed_args:
 
-    '''
+    """
 
     loggingLevel = logging.DEBUG if parsed_args.verbose else logging.INFO
     logging.basicConfig(level=loggingLevel)
@@ -110,7 +102,7 @@ def get_args_namespace(arg_string=None):
     return args
 
 if __name__ == '__main__':
-    '''Run SMIA-CUKIE from the command line'''
+    """Run SMIA-CUKIE from the command line"""
 
     args = get_args_namespace()
     run_smia_cukie(args)
