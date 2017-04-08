@@ -1,19 +1,19 @@
-# SMIA-CUKIE
+### SMIA-CUKIE
 
-## Simultaneous Multichannel Immunofluorescense Digital Imaging Analyzer
-## By Gil Cukierman
+### Simultaneous Multichannel Immunofluorescence Digital Imaging Analyzer
 
-This application was created to bulk process and analyze batches of monochromatic images providing localization(masks), intensities, and similar quantifying values(markers), including collocalizations of multichannel monochromatic imunofluorescent (or IHC, etc.) images.
+This application was created to bulk process and analyze batches of monochromatic images providing localization (masks), intensities, and similar quantifying values (markers), including co-localizations of multichannel monochromatic immunofluorescent (or IHC, etc.) images.
 
-It can output both image and value(excel) outputs. 
+It creates both image and value (excel) outputs.  
 
 It was originally developed for use in:
->	J. Franco-Barraza et.al 2015 at the Cukierman Lab Fox Chase Cancer Center
+>	J. Franco-Barraza et.al 2017. *eLife* http://dx.doi.org/10.7554/eLife.20600 
+>       Cukierman Lab
+>	Fox Chase Cancer Center, Philadelphia, PA 19111.
 
 
-**Please read installation instructions and relevant documentation BEFORE you begin.**
 
-*If you wish to raise an issue with the program or extend it, please open a new issue on github or fork and open a pull request.*
+
 
 **Installation:**
 
@@ -45,13 +45,13 @@ You can then download the source code in two ways:
 
 To run SMIA-CUKIE using the graphical interface, just double click on SMIA-CUKIE.py
 
-To run MakeBatches utility using the graphical interface, just double click on MakeBatches.py
+To run _MakeBatches_ utility using the graphical interface, just double click on MakeBatches.py
 
 <br>
-*An example configuration file and images to test on have been provided in production_testers*
+*An example configuration file and test images can be found in production testers folder on SMIA-CUKIE github webstie: https://github.com/cukie/SMIA/tree/master/production_testers*
 <br>
 <br>
-*If you don't plan on running this application from the command line, you may stop here*
+*If you don't plan on running this application from the command line, you may stop here.*
 <br>
 <br>
 <br>
@@ -69,7 +69,7 @@ configuration file in a text editor and can be a little more technical.
 
 **Image Format and Directory Structure:**
 
-The "base directory" will be a folder that holds all other folders. A typical file structure for analyzation MUST be of this form:
+The "base directory" will be a folder that holds all other folders. A typical file structure for analysis MUST be in the following format:
 
 	Base_Directory
 		-> Batch1_Directory
@@ -88,7 +88,7 @@ The "base directory" will be a folder that holds all other folders. A typical fi
                         -> Image5
                         ... all directories must contain same number of images
 
-		-> More_Batches!!!!!
+		-> More_Batches as needed...
                         -> Image1
                         -> Image2
                         -> Image3
@@ -105,9 +105,7 @@ For every run of the application, you must first create a configuration file. A 
 
 A default configuration file skin named ConfigMe will be created.
 
-Copy ConfigMe and rename it to something meaningful, and proceed to 
-fill in the fields of the JSON formatted file. Each field has a key
-and a value formatted as - key:value.
+Copy ConfigMe and rename with a more meaningful filename, and proceed to fill in the fields of the JSON formatted file. Each field has a key and a value formatted as - key:value.
 
 DO NOT CHANGE THE KEYS - ONLY THE VALUES. DO NOT LEAVE ANY DEFAULT VALUE INFORMATION IN THE CONFIGURATION FILE.
 
@@ -122,7 +120,7 @@ Replace each descriptor value with the information it asks for. For clarificatio
 		A list of all markers in the following format:
 			[file prefix, desired name, threshold]
 
-			file prefix - a unique identifier for the name of this specific image frame. 
+			file prefix - a unique identifier for the name of this specific image frame. A file prefix cannot be a subset of another file prefix (mask or marker). A file prefix will be used to match to the file name within each batch. 
 
 			desired name - the name you would like to use to identify the file. This is the name that will 					represent the marker in your results. 
 
@@ -157,11 +155,8 @@ To run the program, open a terminal(mac) or command prompt(windows), and type th
 	
 >	$ python images.py [/path/to/config/file/omit/brackets]
 
-If the program runs successfully (can take several minutes if there are many images and/or operation to analyze) you will see a message telling you that 'you have successfully proccessed:' your images, and where you can find your results. 
+If the program runs successfully (can take several minutes if there are many images and/or operation to analyze) you will see a message telling you that 'you have successfully processed:' your images, and where you can find your results. 
 
-**QUESTIONS/COMMENTS:**
-
-For general inquiries please contact **Dr. Edna Cukierman**
-
-**If you wish to raise an issue with the program or extend it, please open a new issue on github or fork and open a pull request.**
-
+For general inquiries please contact *Dr. Edna Cukierman.*
+https://www.foxchase.org/edna-cukierman
+Email: EdnaCukierman@gmail.com
