@@ -1,6 +1,6 @@
-#SMIA-CUKIE
-*The Simultaneous Multichannel Immunofluorescence Digital Imaging Analyzer
-by Gil Cukierman*
+# SMIA-CUKIE
+
+#### The Simultaneous Multichannel Immunofluorescence Digital Imaging Analyzerby Gil Cukierman
 ---
 
 This application was created to bulk process and analyze batches of monochromatic images providing localization (masks),
@@ -12,27 +12,29 @@ It was originally developed for use in:
 >       Cukierman Lab
 >	Fox Chase Cancer Center, Philadelphia, PA 19111.
 
-###Installation
+
+### Installation
 You can install a Windows executable for the latest version of SMIA [here]("https://github.com/cukie/SMIA/releases/tag/2.0.0")
 If you want to build from source, or are on a platform other than windows,
 download or clone the source code and run...
 ```python
-$ python smia/setup.py
-$ python smia/smia_ui.py
+python smia/setup.py
+python smia/smia_ui.py
 ```
 Note that to build from source, you'll need Python 2.7 and a C++ compiler.
 The C++ compiler for Windows can be found [here]("https://www.microsoft.com/en-us/download/details.aspx?id=44266")
 
-###RUNNING FROM THE GRAPHICAL INTERFACE:
+
+### Running From the Graphical Interface
 To run the SMIA user interface, run the executable or from source:
 ```python
-$ python smia.run_smia_cukie config_file.txt
+python smia.run_smia_cukie config_file.txt
 ```
 A script and ui to aid in making `batches` can also be downloaded and run
 as a Windows executable. This was developed specifically for the Cukierman
 lab, and will probably be of no use to others. To run from source...
 ```python
-$ python batch_maker_ui.py
+python batch_maker_ui.py
 ```
 
 ### Tests and sample data
@@ -42,7 +44,7 @@ You can run them by editing `tests/test_fixtures/test_images_config.config` to
 point to the `base_dir` and `output_to` the correct paths on your system. 
 From the command line...
 ```python
-$ python smia/run_smia_cukie tests/test_fixtures/test_images_config.config
+python smia/run_smia_cukie tests/test_fixtures/test_images_config.config
 ```
 
 ### Image Format and Directory Structure:
