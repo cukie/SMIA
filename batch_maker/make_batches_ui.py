@@ -1,8 +1,3 @@
-# Author: Gil Cukierman
-# gil.cukierman (at) gmail.com
-# Creation Date: 5/21/15
-# (c) All Rights Reserved
-
 """
 A simple GUI that allows a user to specify a location of 
 a raw output dump of images and group them into "batches"
@@ -20,34 +15,28 @@ import tkFont
 import tkMessageBox
 import make_batches
 
+
 def getdirectory():
-	"""
-	Show a file dialog to ask for a directory
-	update the text box with the new directory 
-	path.
-	"""
+    """
+    Show a file dialog to ask for a directory
+    update the text box with the new directory 
+    path.
+    """
 
-	directory = tkFileDialog.askdirectory()
-	directory_entry.delete(0,Tk.END)
-	directory_entry.insert(0,directory)
+    directory = tkFileDialog.askdirectory()
+    directory_entry.delete(0,Tk.END)
+    directory_entry.insert(0,directory)
 
-def RunMakeBatches():
-	"""
-	Runs make_batches.main(directory), where directory
-	is the text that appears in the Entry box.
-	"""
-	directory = directory_entry.get()
-	root.destroy()
 
-	make_batches.main(directory)
-	# try:
-	# 	MakeBatches.main(directory)
-	# 	Tk.Tk().withdraw()
-	# 	tkMessageBox.showinfo("Success! \nBatches Made!")
-	# except:
-	# 	# Give error window
-	# 	Tk.Tk().withdraw()
-	# 	tkMessageBox.showerror("Error! \nPlease check terminal output.")
+def run_make_batches():
+    """
+    Runs make_batches.main(directory), where directory
+    is the text that appears in the Entry box.
+    """
+    directory = directory_entry.get()
+    root.destroy()
+
+    make_batches.main(directory)
 
 # We only really need one window here...
 root = Tk.Tk()
@@ -66,7 +55,7 @@ directory_entry = Tk.Entry(root, width = 60)
 directory_entry.insert(0,"Directory of 8-bit images")
 browse_button = Tk.Button(root, text="Browse",command=getdirectory)
 
-run_button = Tk.Button(root, text="MakeBatches",command=RunMakeBatches)
+run_button = Tk.Button(root, text="MakeBatches", command=run_make_batches)
 
 # Pack it all in to our window
 title_label.grid()

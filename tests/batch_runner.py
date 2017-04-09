@@ -7,7 +7,7 @@
 
 import unittest
 import mock
-from smiaCukie import batch_image, batch_runner
+from smia import batch_image, batch_runner
 
 
 class TestBatchRunner(unittest.TestCase):
@@ -73,7 +73,7 @@ class TestBatchRunner(unittest.TestCase):
 
         self.assertEqual(assertion.exception.message, expectedBaseMessage + phonyPath)
 
-    @mock.patch('smiaCukie.batch_runner.BatchRunner._getImage')
+    @mock.patch('smia.batch_runner.BatchRunner._getImage')
     def testCreateSinglePicObjectTrueNegativeFlag(self, get_image):
         """"Test that given a pic_path, we can create the appropriate
          pic obj aka Mask or Marker. This test will 
@@ -106,7 +106,7 @@ class TestBatchRunner(unittest.TestCase):
             print result
             self.assertIsInstance(result, batch_image.Marker)
 
-    @mock.patch('smiaCukie.batch_runner.BatchRunner._getImage')
+    @mock.patch('smia.batch_runner.BatchRunner._getImage')
     def testCreateSinglePicObjectFalseNegativeFlag(self, imageGetter):
         """Test that given a pic_path, we can create the appropriate 
         Mask or Marker. This test will have withNegative=False

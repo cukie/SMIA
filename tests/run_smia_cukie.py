@@ -1,6 +1,6 @@
 import unittest
 import mock
-from smiaCukie import run_smia_cukie
+from smia import run_smia_cukie
 
 
 class TestRunSmiaCukie(unittest.TestCase):
@@ -19,7 +19,7 @@ class TestRunSmiaCukie(unittest.TestCase):
             'output_thumbnails': 'thumbnails',
         }
 
-    @mock.patch('smiaCukie.run_smia_cukie.batch_runner.BatchRunner')
+    @mock.patch('smia.run_smia_cukie.batch_runner.BatchRunner')
     def testBatchRunnerFromConfigDict(self, batch_runner):
         """Test that we are grabbing parameters from the dict and creating a BatchRunner Object"""
         run_smia_cukie.batchRunnerFromConfigDict(self.configuration_dict)
