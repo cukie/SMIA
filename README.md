@@ -14,7 +14,7 @@ It was originally developed for use in:
 
 
 ### Installation
-You can install a Windows executable for the latest version of SMIA [here]("https://github.com/cukie/SMIA/releases/tag/2.0.0")
+You can install a Windows executable for the latest version of SMIA at https://github.com/cukie/SMIA/releases/tag/2.0.0
 If you want to build from source, or are on a platform other than windows,
 download or clone the source code and run...
 ```python
@@ -22,7 +22,7 @@ python smia/setup.py
 python smia/smia_ui.py
 ```
 Note that to build from source, you'll need Python 2.7 and a C++ compiler.
-The C++ compiler for Windows can be found [here]("https://www.microsoft.com/en-us/download/details.aspx?id=44266")
+The C++ compiler for Windows can be found at https://www.microsoft.com/en-us/download/details.aspx?id=44266
 
 
 ### Running From the Graphical Interface
